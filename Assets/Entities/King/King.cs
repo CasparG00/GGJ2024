@@ -4,14 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public enum Activity
-{
-    Idle,
-    Dance,
-    Jest,
-    Fight,
-}
-
 public class King : MonoBehaviour
 {
 
