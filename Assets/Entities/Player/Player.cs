@@ -16,11 +16,13 @@ public class Player : MonoBehaviour
     private void OnEnable()
     {
         King.OnPreferredActivityChanged += OnPreferredActivityChanged;
+        King.AddPlayer(this);
     }
 
     private void OnDisable()
     {
         King.OnPreferredActivityChanged -= OnPreferredActivityChanged;
+        King.RemovePlayer(this);
     }
 
     private void Update()

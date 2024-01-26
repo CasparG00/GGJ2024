@@ -14,31 +14,78 @@ public enum Activity
 
 public class King : MonoBehaviour
 {
-    // This event gets called every time the king changes his preferred activity.
-    // The player listens to this event to update the player's knowledge of the king's preferred activity.
-    // The UI can also listen to this event to update the UI.
-    // There's only one king so a static event is fine.
-    public static event Action<Activity> OnPreferredActivityChanged;
-    
-    public int Humor { get; private set; }
 
+    /// <summary>
+    /// This event gets called every time the king changes his preferred activity.
+    /// The player listens to this event to update the player's knowledge of the king's preferred activity.
+    /// The UI can also listen to this event to update the UI. 
+    /// There's only one king so a static event is fine. 
+    /// </summary>
+    public static event Action<Activity> OnPreferredActivityChanged;
     private List<Activity> preferredActivitySet;
 
-    // The minimum and maximum amount of time the king will like an activity before changing his mind.
-    [SerializeField] private Vector2Int attentionSpanRange = Vector2Int.one;
-    
     // The index of the current preferred activity in the list.
-    private int preferredActivityIndex;
+    private int preferredActivityIndex; 
+
+    // The minimum and maximum amount of time the king will like an activity before changing his mind.
+    [SerializeField] private Vector2Int attentionSpanRange = Vector2Int.one;  
+
+    //Player Settings
+    private static readonly List<Player> playerList = new();
+    public float CurrentHumor { get; private set; }
+
+    [SerializeField] private int decreaseRate = 1;
+    [SerializeField] private int activitySize = 20;
+
+    //Make the King a Singleton, so stuff does not need to be static.
+    private static King Instance { get; set; }
 
     private void Awake()
     {
+        #region singleton
+        // If there is an instance, and it's not me, delete myself.
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
+        #endregion singleton
+
         CreatePreferredActivityList();
         StartCoroutine(DequeuePreferredActivity());
     }
-    
+
+  
+
+    //When enabling the King AI make sure to subscribe the Player again.
+    private void OnEnable()
+    {
+        foreach (var _player in playerList)
+        {
+            _player.OnPlayerScoreChanged += OnPlayerScoreChanged;
+        }
+    }
+
+    private void OnDisable()
+    {
+        foreach (var _player in playerList)
+        {
+            _player.OnPlayerScoreChanged -= OnPlayerScoreChanged;
+        }
+    }
+
+    private void Update()
+    {
+        HandleHumor();
+       
+    }
+
     private IEnumerator DequeuePreferredActivity()
     {
-        while (Humor > 0)
+        while (CurrentHumor > 0)
         {
             yield return new WaitForSeconds(UnityEngine.Random.Range(attentionSpanRange.x, attentionSpanRange.y));
             
@@ -54,7 +101,7 @@ public class King : MonoBehaviour
     {
         preferredActivitySet = new List<Activity>();
         
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < activitySize; i++)
         {
             // Every loop we create a list of all possible activities.
             List<Activity> possibleActivities = new((Activity[])Enum.GetValues(typeof(Activity)));
@@ -71,4 +118,30 @@ public class King : MonoBehaviour
             preferredActivitySet.Add(possibleActivities[UnityEngine.Random.Range(0, possibleActivities.Count)]);
         }
     }
+
+    //Subscribe the player to the list so the King can access it.
+    public static void AddPlayer(Player _player)
+    {
+        playerList.Add(_player);
+        _player.OnPlayerScoreChanged += Instance.OnPlayerScoreChanged;
+    }
+
+    //Remove the player from the list so the King won't look for it.
+    public static void RemovePlayer(Player _player)
+    {
+        playerList.Remove(_player);
+        _player.OnPlayerScoreChanged -= Instance.OnPlayerScoreChanged;
+    }
+
+    //Add score to the HumorMeter
+    private void OnPlayerScoreChanged(int _scoreChange)
+    {
+        CurrentHumor += _scoreChange;
+    }
+
+    private void HandleHumor()
+    {
+        CurrentHumor -= decreaseRate * Time.deltaTime;
+    }
+
 }
