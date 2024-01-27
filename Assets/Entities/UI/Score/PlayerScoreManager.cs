@@ -7,7 +7,7 @@ public class PlayerScoreManager : MonoBehaviour
 {
     [SerializeField] private PlayerScoreCell playerScoreCellPrefab;
     
-    private List<Player> players = new();
+    public List<Player> players = new();
     
     private List<PlayerScoreCell> playerScoreCells = new();
 
