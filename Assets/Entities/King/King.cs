@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class King : MonoBehaviour
 {
@@ -22,15 +24,29 @@ public class King : MonoBehaviour
     // The minimum and maximum amount of time the king will like an activity before changing his mind.
     [SerializeField] private Vector2Int attentionSpanRange = Vector2Int.one;  
 
-    //Player Settings
+    [Header("Settings")]
     private static readonly List<Player> playerList = new();
     public float CurrentHumor { get; private set; } = 500f;
+    [SerializeField] private int maximumHumor = 1000;
+
+    [SerializeField] private Slider SliderHumor;
+    [SerializeField] private TMP_Text AssignmentText;
 
     [SerializeField] private int decreaseRate = 1;
     [SerializeField] private int activitySetSize = 20;
 
+    [SerializeField]
+    private Dictionary<Activity, string> EventTextDictionary = new Dictionary<Activity, string>()
+    {
+        {Activity.Dance, "Dance for me!" },
+        {Activity.Fight, "Fight for me!"},
+        { Activity.Jest, "Tell me a joke!"},
+
+    };
+
     //Make the King a Singleton, so stuff does not need to be static.
     private static King Instance { get; set; }
+
 
     private void Awake()
     {
@@ -48,6 +64,8 @@ public class King : MonoBehaviour
 
         CreatePreferredActivityList();
         StartCoroutine(DequeuePreferredActivity());
+
+        SliderHumor.maxValue = maximumHumor;
     }
 
     //When enabling the King AI make sure to subscribe the Player again.
@@ -70,6 +88,7 @@ public class King : MonoBehaviour
     private void Update()
     {
         HandleHumor();
+        SliderHumor.value = CurrentHumor;
     }
 
     private IEnumerator DequeuePreferredActivity()
@@ -85,6 +104,7 @@ public class King : MonoBehaviour
             OnPreferredActivityChanged?.Invoke(preferredActivitySet[preferredActivityIndex]);
             
             Debug.Log($"The king now likes {preferredActivitySet[preferredActivityIndex]}");
+            AssignmentText.text = EventTextDictionary[preferredActivitySet[preferredActivityIndex]];
         }
     }
 

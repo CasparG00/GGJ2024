@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+
 public class DanceGame : MonoBehaviour
 {
     // SpriteRenderer should probably change to an actual dance move cell class.
