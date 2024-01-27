@@ -32,4 +32,39 @@ MonoBehaviour:
     jokeSentence:
     - Why was the king
     - only a foot long?
-    - Because he was a ruler
+    - Because he was a ruler.
+  - id: 5
+    jokeSentence:
+    - Why was Sir Launcelot
+    - ' always tired?'
+    - 'He worked the Knight Shift. '
+  - id: 6
+    jokeSentence:
+    - What did the farmer
+    - say to the other farmer?
+    - Hay.
+  - id: 7
+    jokeSentence:
+    - My mother almost called me lance
+    - but that name was all too common because
+    - people were named Lance-a-lot.
+  - id: 8
+    jokeSentence:
+    - What do you call a medieval knight who
+    - is afraid to fight?
+    - Sir Render.
+  - id: 9
+    jokeSentence:
+    - Have you heard the songs of
+    - the king's farmer?
+    - Apparently he dropped heavy beets.
+  - id: 10
+    jokeSentence:
+    - Why did the king
+    - go to the dentist?
+    - To get his crown.
+  - id: 11
+    jokeSentence:
+    - What do you call a
+    - medieval dog that can perform magic?
+    - A labracadabrador!

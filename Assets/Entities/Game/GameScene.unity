@@ -710,17 +710,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!114 &1139158590 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7251426869056579133, guid: 2f8cd7cf2e1bd5240b7316a5fb502f41, type: 3}
-  m_PrefabInstance: {fileID: 2398537386972986465}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!43 &1249780003
 Mesh:
   m_ObjectHideFlags: 0
@@ -1324,17 +1313,6 @@ MonoBehaviour:
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
---- !u!114 &1918384006 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1366206535505397338, guid: 2f8cd7cf2e1bd5240b7316a5fb502f41, type: 3}
-  m_PrefabInstance: {fileID: 2398537386972986465}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2051055466
 GameObject:
   m_ObjectHideFlags: 0
@@ -1743,14 +1721,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4583507971628341303, guid: 14ecf715a49a14c4b8416166135057b0, type: 3}
-      propertyPath: SliderHumor
-      value: 
-      objectReference: {fileID: 1918384006}
-    - target: {fileID: 4583507971628341303, guid: 14ecf715a49a14c4b8416166135057b0, type: 3}
-      propertyPath: AssignmentText
-      value: 
-      objectReference: {fileID: 1139158590}
     - target: {fileID: 5272013865205526802, guid: 14ecf715a49a14c4b8416166135057b0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
