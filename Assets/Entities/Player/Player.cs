@@ -13,10 +13,9 @@ public class Player : MonoBehaviour
     
     public PlayerInput PlayerInput { get; private set; }
     
-    private Activity kingPreferredActivity;
+    public Activity KingPreferredActivity { get; private set; }
 
     private readonly WaitForSeconds stunDuration = new(0.5f);
-    private bool isStunned;
 
     private void Awake()
     {
@@ -39,19 +38,18 @@ public class Player : MonoBehaviour
         OnPlayerScoreChanged?.Invoke(scorePerSecond);
     }
 
-    public void ExecuteStun()
+    public void Hit()
     {
         StopCoroutine(Stun());
         StartCoroutine(Stun());
-        Debug.Log("Hit");
     }
 
     private IEnumerator Stun()
     {
-        isStunned = true;
+        PlayerInput.DeactivateInput();
 
         yield return stunDuration;
-
-        isStunned = false;
+        
+        PlayerInput.ActivateInput();
     }
 }

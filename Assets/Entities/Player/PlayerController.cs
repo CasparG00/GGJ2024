@@ -1,10 +1,12 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(Player))]
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerController : MonoBehaviour
 {
+    private Player player;
     private PlayerInput playerInput;
 
     private InputAction moveAction;
@@ -19,6 +21,7 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        player = GetComponent<Player>();
         playerInput = GetComponent<PlayerInput>();
         rigidbody = GetComponent<Rigidbody2D>();
 
@@ -37,7 +40,6 @@ public class PlayerController : MonoBehaviour
     {
         if (punchAction.triggered)
         {
-            Debug.Log("HA");
             CheckPunch();
         }
     }
@@ -53,14 +55,22 @@ public class PlayerController : MonoBehaviour
         Vector2 detectionPosition = playerPosition + (playerDirection * punchDistance);
 
         // Check for enemies in the detection position
-        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(detectionPosition, 0.1f, playerLayer);
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(detectionPosition, 1f, playerLayer);
 
         foreach (Collider2D hitCollider in hitColliders)
         {
             // Do something with the enemy (e.g., attack, damage, etc.)
-            Debug.Log("Enemy in front: " + hitCollider.gameObject.name);
-            Player player = hitCollider.GetComponent<Player>();
-            player.ExecuteStun();
+            Player otherPlayer = hitCollider.GetComponentInParent<Player>();
+            
+            if (otherPlayer == null || otherPlayer == player)
+                continue;
+            
+            otherPlayer.Hit();
+
+            if (player.KingPreferredActivity is Activity.Fight)
+            {
+                player.AddScore();
+            }
         }
     }
 }

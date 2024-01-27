@@ -20,16 +20,10 @@ public class DanceGame : MonoBehaviour
     private Dictionary<int, InputAction> danceMoveActions = new();
     
     private Queue<DanceMoveHint> danceMoveHintsQueue = new();
-    
-    private readonly WaitForSeconds stunDuration = new(0.5f);
-    private bool isStunned;
 
     private void Update()
     {
         if (danceMoveActions.Count == 0)
-            return;
-
-        if (isStunned)
             return;
         
         foreach (var element in danceMoveActions)
@@ -100,17 +94,7 @@ public class DanceGame : MonoBehaviour
         }
         else
         {
-            StopCoroutine(Stun());
-            StartCoroutine(Stun());
+            owner.Hit();
         }
-    }
-
-    private IEnumerator Stun()
-    {
-        isStunned = true;
-        
-        yield return stunDuration;
-        
-        isStunned = false;
     }
 }
