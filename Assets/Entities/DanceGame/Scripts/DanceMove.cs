@@ -6,4 +6,6 @@ public struct DanceMove
 {
     public int id;
     public Sprite sprite;
+    public Sprite keyboardButton;
+    public Sprite controllerButton;
 }

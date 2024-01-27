@@ -53,7 +53,9 @@ public class DanceGame : MonoBehaviour
         for (int i = 0; i < maximumDanceMoveHints; i++)
         {
             DanceMoveHint danceMoveObject = Instantiate(danceMoveHintPrefab, danceMoveHintContainer);
-            danceMoveObject.SetSprite(danceMoveSet[i % danceMoveSet.Count].sprite);
+            danceMoveObject.SetDanceMoveSprites(danceMoveSet[i % danceMoveSet.Count], _owner);
+            
+
             danceMoveHintsQueue.Enqueue(danceMoveObject);
         }
     }
@@ -85,8 +87,8 @@ public class DanceGame : MonoBehaviour
             // Spawn a new dance move hint and put it in the back of the queue.
             int offsetIndex = (danceMoveIndex + maximumDanceMoveHints) % danceMoveSet.Count;
             danceMoveObject = Instantiate(danceMoveHintPrefab, danceMoveHintContainer);
-            danceMoveObject.SetSprite(danceMoveSet[offsetIndex].sprite);
-            
+            danceMoveObject.SetDanceMoveSprites(danceMoveSet[offsetIndex], owner);
+
             danceMoveHintsQueue.Enqueue(danceMoveObject);
             
             owner.AddScore();

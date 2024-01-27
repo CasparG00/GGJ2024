@@ -82,7 +82,7 @@ public class King : MonoBehaviour
         
         if(CurrentHumor > maximumHumor)
         {
-            playersHaveWon = true; 
+            playersHaveWon = true;  
             CurrentHumor = maximumHumor;
         }
     }

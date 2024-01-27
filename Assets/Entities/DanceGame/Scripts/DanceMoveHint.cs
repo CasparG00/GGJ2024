@@ -4,7 +4,9 @@ using UnityEngine.UI;
 
 public class DanceMoveHint : MonoBehaviour
 {
-    [SerializeField] private Image image;
+    [SerializeField] private Image hintImage;
+    [SerializeField] private Image buttonImage;
+
     [SerializeField] private LayoutElement layoutElement;
     
     [SerializeField] private float animationDuration = 0.2f;
@@ -14,14 +16,27 @@ public class DanceMoveHint : MonoBehaviour
         StartCoroutine(Despawn());
     }
     
-    public void SetSprite(Sprite _sprite)
+    public void SetDanceMoveSprites(DanceMove _danceMove, Player _player)
     {
-        image.sprite = _sprite;
+        hintImage.sprite = _danceMove.sprite;
+        
+        if(_player.PlayerInput.currentControlScheme == "Keyboard")
+        {
+            buttonImage.sprite = _danceMove.keyboardButton;
+        }
+        else
+        {
+            buttonImage.sprite = _danceMove.controllerButton;
+        }
     }
-    
+    public void SetButtonSprite(Sprite _sprite)
+    {
+        buttonImage.sprite = _sprite;
+    }
+
     private IEnumerator Despawn()
     {
-        image.gameObject.SetActive(false);
+        hintImage.gameObject.SetActive(false);
         
         float startHeight = layoutElement.preferredHeight;
         
