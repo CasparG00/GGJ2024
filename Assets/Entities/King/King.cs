@@ -115,20 +115,20 @@ public class King : MonoBehaviour
     public static void AddPlayer(Player _player)
     {
         playerList.Add(_player);
-        _player.OnPlayerScoreChanged += Instance.OnPlayerScoreChanged;
+        _player.OnPlayerScoreChanged += OnPlayerScoreChanged;
     }
 
     //Remove the player from the list so the King won't look for it.
     public static void RemovePlayer(Player _player)
     {
         playerList.Remove(_player);
-        _player.OnPlayerScoreChanged -= Instance.OnPlayerScoreChanged;
+        _player.OnPlayerScoreChanged -= OnPlayerScoreChanged;
     }
 
     //Add score to the HumorMeter
-    private void OnPlayerScoreChanged(int _scoreChange)
+    private static void OnPlayerScoreChanged(int _scoreChange)
     {
-        CurrentHumor += _scoreChange;
+        Instance.CurrentHumor += _scoreChange;
     }
 
     private void HandleHumor()

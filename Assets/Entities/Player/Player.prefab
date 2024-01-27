@@ -119,6 +119,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
+  punchDistance: 2
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!1 &7825213991510905086
 GameObject:
   m_ObjectHideFlags: 0
