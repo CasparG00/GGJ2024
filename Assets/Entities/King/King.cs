@@ -33,6 +33,8 @@ public class King : MonoBehaviour
     public int MaximumHumor => maximumHumor;
    
     public static King Instance { get; private set; }
+
+    public bool playersHaveWon = false;
     
     private void Awake()
     {
@@ -72,6 +74,17 @@ public class King : MonoBehaviour
     private void Update()
     {
         HandleHumor();
+
+        if(CurrentHumor < 0)
+        {
+            CurrentHumor = 0;
+        }
+        
+        if(CurrentHumor > maximumHumor)
+        {
+            playersHaveWon = true; 
+            CurrentHumor = maximumHumor;
+        }
     }
 
     private IEnumerator DequeuePreferredActivity()
