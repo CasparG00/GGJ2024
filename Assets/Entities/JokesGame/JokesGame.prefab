@@ -57,9 +57,9 @@ MonoBehaviour:
   m_ChildAlignment: 4
   m_Spacing: 12
   m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
@@ -77,4 +77,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   joke: {fileID: 11400000, guid: d7251f0483510e14aa8609324af6f647, type: 2}
   maximumJokeDialog: 3
-  selectButton: {fileID: 2118882104677135279, guid: 7aecad5e3b8a7e34aa22daa676e60374, type: 3}
+  selectButton: {fileID: 4964912040876180173, guid: 7aecad5e3b8a7e34aa22daa676e60374, type: 3}

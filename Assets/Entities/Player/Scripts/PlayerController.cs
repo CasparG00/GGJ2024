@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour
         if (!canMove)
             return;
         
-        float input = moveAction.ReadValue<float>();
+        float input = moveAction.ReadValue<Vector2>().x;
         rigidbody.velocity = Vector2.right * (input * moveSpeed);
     }
 

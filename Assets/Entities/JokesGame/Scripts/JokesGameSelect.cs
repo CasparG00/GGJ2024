@@ -1,26 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class JokesGameSelect : MonoBehaviour
 {
-    [SerializeField] private Text jokeText;
+    [SerializeField] private TextMeshProUGUI jokeText;
+    [SerializeField] private Image buttonImage;
+    [SerializeField] private Sprite selectedSprite;
+    [SerializeField] private Sprite unselectedSprite;
 
-    public int id;
+    private JokesGame game;
+    private int id;
 
-    private void Awake()
+    public void Refresh(JokesGame _game, int _id, string _text)
     {
-
+        game = _game;
+        id = _id;
+        jokeText.text = _text;
     }
 
-    public void ChangeText(string sentence)
+    public void Select(bool _value)
     {
-        jokeText.text = sentence;
+        buttonImage.sprite = _value ? selectedSprite : unselectedSprite;
     }
 
     public void NextSentence()
     {
-        JokesGame.instance.NextSentence(jokeText.text, id);
+        game.NextSentence(id);
     }
 }

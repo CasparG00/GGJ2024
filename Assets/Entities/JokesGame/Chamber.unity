@@ -502,6 +502,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1312237094}
     m_Modifications:
+    - target: {fileID: 483473999858676920, guid: 6d917c98a6302084a91c5840ef1e170e, type: 3}
+      propertyPath: m_Spacing
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2899114673572777843, guid: 6d917c98a6302084a91c5840ef1e170e, type: 3}
       propertyPath: m_Name
       value: JokesGame
@@ -516,27 +520,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3938418923555293890, guid: 6d917c98a6302084a91c5840ef1e170e, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3938418923555293890, guid: 6d917c98a6302084a91c5840ef1e170e, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3938418923555293890, guid: 6d917c98a6302084a91c5840ef1e170e, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3938418923555293890, guid: 6d917c98a6302084a91c5840ef1e170e, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3938418923555293890, guid: 6d917c98a6302084a91c5840ef1e170e, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 800
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3938418923555293890, guid: 6d917c98a6302084a91c5840ef1e170e, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 120
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3938418923555293890, guid: 6d917c98a6302084a91c5840ef1e170e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -585,18 +589,6 @@ PrefabInstance:
     - target: {fileID: 3938418923555293890, guid: 6d917c98a6302084a91c5840ef1e170e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7309804922422187055, guid: 6d917c98a6302084a91c5840ef1e170e, type: 3}
-      propertyPath: selectButtonList.Array.data[0]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7309804922422187055, guid: 6d917c98a6302084a91c5840ef1e170e, type: 3}
-      propertyPath: selectButtonList.Array.data[1]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7309804922422187055, guid: 6d917c98a6302084a91c5840ef1e170e, type: 3}
-      propertyPath: selectButtonList.Array.data[2]
-      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

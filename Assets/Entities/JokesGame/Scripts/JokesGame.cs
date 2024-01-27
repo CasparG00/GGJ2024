@@ -1,104 +1,148 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class JokesGame : MonoBehaviour
 {
-    public static JokesGame instance;
-
     [SerializeField] private Jokes joke;
 
     [SerializeField] private int maximumJokeDialog = 3;
-    [SerializeField] private GameObject selectButton;
+    [SerializeField] private JokesGameSelect selectButton;
 
-    public List<JokesGameSelect> selectButtonList;
+    private Player owner;
+    
+    private List<JokesGameSelect> selectButtonList;
+    private int currentSelectButtonIndex;
+    
+    private List<Joke> selectedJokeList = new();
 
-    private List<Joke> jokeList;
+    private int currentSentence;
+    private int currentId;
 
-    private List<Joke> selectedJockList = new List<Joke>();
-
-    private int curSentense = 0;
-
-    private int curId = 0;
-
-    private void Awake()
+    private void Update()
     {
-        instance = this;
-
-        selectButtonList = new List<JokesGameSelect>();
-
-        for (int index = 0; index < maximumJokeDialog; index++)
-        {
-            GameObject button = Instantiate(selectButton);
-            button.transform.parent = transform;
-            selectButtonList.Add(button.GetComponent<JokesGameSelect>());
-        }
-    }
-
-    private void Start()
-    {
-        SelectJokes();
-    }
-
-    public void NextSentence(string sentence, int id)
-    {
-        curSentense += 1;
-
-        if (curId != 0)
-        {
-            if (curId == id)
-            {
-                JokesGameManager.instance.AddScore(20);
-            }
-            else
-            {
-                JokesGameManager.instance.AddScore(-10);
-            }
-        }
-        curId = id;
-
-        Debug.Log(sentence);
-
-        ChangeJoke();
-    }
-
-    public void ChangeJoke()
-    {
-        if (curSentense > 2)
+        if (owner is null)
             return;
 
-        selectedJockList = selectedJockList.OrderBy(_ => Random.value).ToList<Joke>();
-
-        for (int i = 0; i < selectButtonList.Count; i++)
+        if (selectButtonList is { Count: 0 })
+            return;
+        
+        InputAction moveAction = owner.PlayerInput.actions.FindAction("Move");
+        if (moveAction.triggered)
         {
-            selectButtonList[i].ChangeText(selectedJockList[i].jokeSentence[curSentense]);
-            selectButtonList[i].id = selectedJockList[i].id;
+            float input = moveAction.ReadValue<Vector2>().y;
+            if (input < -0.1f)
+            {
+                currentSelectButtonIndex = (currentSelectButtonIndex + 1) % selectButtonList.Count;
+
+                UpdateSelectedButton();
+            }
+            else if (input > 0.1f)
+            {
+                currentSelectButtonIndex--;
+
+                if (currentSelectButtonIndex < 0)
+                {
+                    currentSelectButtonIndex = selectButtonList.Count - 1;
+                }
+
+                UpdateSelectedButton();
+            }
+        }
+
+        if (owner.PlayerInput.actions.FindAction("Punch").triggered)
+        {
+            selectButtonList[currentSelectButtonIndex].NextSentence();
         }
     }
-
-    public void SelectJokes()
+    
+    private void UpdateSelectedButton()
     {
-        SelectOtherRandom(joke.jokeCollection.Count);
+        for (int i = 0; i < selectButtonList.Count; i++)
+        {
+            selectButtonList[i].Select(i == currentSelectButtonIndex);
+        }
+    }
+    
+    public void StartJokesGame(Player _owner)
+    {
+        owner = _owner;
+        
+        selectButtonList ??= new List<JokesGameSelect>();
+
+        for (int i = selectButtonList.Count - 1; i >= 0; i--)
+        {
+            Destroy(selectButtonList[i].gameObject);
+            selectButtonList.RemoveAt(i);
+        }
 
         for (int i = 0; i < maximumJokeDialog; i++)
         {
-            selectButtonList[i].ChangeText(jokeList[i].jokeSentence[curSentense]);
-            selectButtonList[i].id = jokeList[i].id;
-            selectedJockList.Add(jokeList[i]);
+            JokesGameSelect button = Instantiate(selectButton, transform);
+            selectButtonList.Add(button);
+        }
+        
+        selectedJokeList.Clear();
+        
+        currentSentence = 0;
+        currentId = 0;
+        
+        List<Joke> jokeList = SelectOtherRandom();
+
+        for (int i = 0; i < maximumJokeDialog; i++)
+        {
+            selectButtonList[i].Refresh(this, jokeList[i].id, jokeList[i].jokeSentence[currentSentence]);
+            selectedJokeList.Add(jokeList[i]);
+        }
+    }
+    
+    public void EndJokesGame()
+    {
+        Destroy(gameObject);
+    }
+    
+    public void NextSentence(int _id)
+    {
+        currentSentence += 1;
+        
+        if (currentId != 0)
+        {
+            if (currentId == _id)
+            {
+                owner.AddScore();
+            }
+            else
+            {
+                owner.Hit();
+            }
+        }
+        
+        currentId = _id;
+
+        if (currentSentence < 3)
+        {
+            NextSection();
+        }
+        else
+        {
+            StartJokesGame(owner);
         }
     }
 
-    private void SelectOtherRandom(int maxNumber)
+    public void NextSection()
     {
-        jokeList = new List<Joke>();
-        
-        for (int i = 0; i < maxNumber; i++)
-        {
-            jokeList.Add(joke.jokeCollection[i]);
-        }
+        selectedJokeList = selectedJokeList.OrderBy(_ => Random.value).ToList();
 
-        jokeList = jokeList.OrderBy(_ => Random.value).ToList<Joke>();
+        for (int i = 0; i < selectButtonList.Count; i++)
+        {
+            selectButtonList[i].Refresh(this, selectedJokeList[i].id, selectedJokeList[i].jokeSentence[currentSentence]);
+        }
+    }
+
+    private List<Joke> SelectOtherRandom()
+    {
+        List<Joke> jokeList = new(joke.jokeCollection);
+        return jokeList.OrderBy(_ => Random.value).ToList();
     }
 }

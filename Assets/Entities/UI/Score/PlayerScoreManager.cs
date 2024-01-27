@@ -35,7 +35,7 @@ public class PlayerScoreManager : MonoBehaviour
         for (int i = 0; i < players.Count; i++)
         {
             PlayerScoreCell playerScoreCell = Instantiate(playerScoreCellPrefab, transform);
-            playerScoreCell.Refresh(i, players[i].Score);
+            playerScoreCell.Refresh(players[i].Color, i, players[i].Score);
             playerScoreCells.Add(playerScoreCell);
         }
     }
@@ -44,7 +44,7 @@ public class PlayerScoreManager : MonoBehaviour
     {
         for (int i = 0; i < players.Count; i++)
         {
-            playerScoreCells[i].Refresh(i, players[i].Score);
+            playerScoreCells[i].Refresh(players[i].Color, i, players[i].Score);
         }
     }
     

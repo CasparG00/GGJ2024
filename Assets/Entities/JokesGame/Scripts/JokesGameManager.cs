@@ -1,29 +1,85 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class JokesGameManager : MonoBehaviour
 {
-    public static JokesGameManager instance;
-
-    [SerializeField] private Text scoreText;
-    private int score = 0;
-
-    private void Awake()
+    [SerializeField] private JokesGame jokesGamePrefab;
+    
+    private readonly Dictionary<Player, JokesGame> activeJokeGames = new();
+    
+    private Activity kingPreferredActivity = Activity.Idle;
+    
+    private void OnEnable()
     {
-        instance = this;
-        TextChange();
+        King.OnPreferredActivityChanged += OnPreferredActivityChanged;
+        
+        PlayerAssigner.OnPlayerConnected += OnPlayerConnected;
+        PlayerAssigner.OnPlayerDisconnected += OnPlayerDisconnected;
     }
-
-    public void AddScore(int s)
+    
+    private void OnDisable()
     {
-        score += s;
-        TextChange();
+        King.OnPreferredActivityChanged -= OnPreferredActivityChanged;
+        
+        PlayerAssigner.OnPlayerConnected -= OnPlayerConnected;
+        PlayerAssigner.OnPlayerDisconnected -= OnPlayerDisconnected;
     }
-
-    private void TextChange()
+    
+    private void OnPreferredActivityChanged(Activity _activity)
     {
-        scoreText.text = "SCORE : " + score;
+        kingPreferredActivity = _activity;
+        
+        if (kingPreferredActivity is Activity.Jest)
+        {
+            List<Player> players = activeJokeGames.Keys.ToList();
+            foreach (var player in players)
+            {
+                // If a player has left the dance game will be null.
+                // In this case a new one needs to be created.
+                if (activeJokeGames[player] == null)
+                {
+                    JokesGame jokesGame = Instantiate(jokesGamePrefab, transform);
+                    activeJokeGames[player] = jokesGame;
+                }
+            
+                // Reinitialize the dance game.
+                activeJokeGames[player].StartJokesGame(player);
+            }
+        }
+        else
+        {
+            foreach (var element in activeJokeGames)
+            {
+                bool isGameActive = element.Value != null;
+                if (isGameActive)
+                {
+                    element.Value.EndJokesGame();
+                }
+            }
+        }
+    }
+    
+    private void OnPlayerConnected(Player _player)
+    {
+        if (kingPreferredActivity is Activity.Jest)
+        {
+            JokesGame jokesGame = Instantiate(jokesGamePrefab, transform);
+            jokesGame.StartJokesGame(_player);
+            
+            activeJokeGames[_player] = jokesGame;
+
+            return;
+        }
+        
+        activeJokeGames[_player] = null;
+    }
+    
+    public void OnPlayerDisconnected(Player _player)
+    {
+        if (kingPreferredActivity is Activity.Jest)
+            activeJokeGames[_player].EndJokesGame();
+
+        activeJokeGames.Remove(_player);
     }
 }

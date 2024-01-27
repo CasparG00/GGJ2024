@@ -6,9 +6,15 @@ public class PlayerScoreCell : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI playerNameText;
 
-    public void Refresh(int _playerIndex, int _score)
+    public void Refresh(Color _textColor, int _playerIndex, int _score)
     {
-        playerNameText.text = $"Player {_playerIndex + 1}: {_score}";
+        string text = $"Player {_playerIndex + 1}: {_score}";
+        
+        if (playerNameText.text == text)
+            return;
+        
+        playerNameText.text = text;
+        playerNameText.color = _textColor;
         StartCoroutine(ScaleTextAnimation());
     }
 
