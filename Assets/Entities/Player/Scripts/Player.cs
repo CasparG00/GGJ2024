@@ -6,6 +6,12 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerInput))]
 public class Player : MonoBehaviour
 {
+    private static readonly int tint = Shader.PropertyToID("_Tint");
+    private static readonly int hitFlash = Shader.PropertyToID("_HitFlash");
+    
+    private const float StunDuration = 0.5f;
+    private const float HitFlashDuration = 0.1f;
+    
     public event Action<int> OnPlayerScoreChanged;
     
     public Color Color { get; private set; }
@@ -18,8 +24,9 @@ public class Player : MonoBehaviour
     
     public Activity KingPreferredActivity { get; private set; }
 
-    private readonly WaitForSeconds stunDuration = new(0.5f);
-
+    private readonly WaitForSeconds hitFlashDuration = new(HitFlashDuration);
+    private readonly WaitForSeconds stunDuration = new(StunDuration - HitFlashDuration);
+    
     private void Awake()
     {
         PlayerInput = GetComponent<PlayerInput>();
@@ -38,7 +45,7 @@ public class Player : MonoBehaviour
     public void SetColor(Color _color)
     {
         Color = _color;
-        spriteRenderer.material.SetColor("_Tint", _color);
+        spriteRenderer.material.SetColor(tint, _color);
     }
     
     public void AddScore()
@@ -56,6 +63,12 @@ public class Player : MonoBehaviour
     private IEnumerator Stun()
     {
         PlayerInput.DeactivateInput();
+
+        spriteRenderer.material.SetFloat(hitFlash, 1f);
+        
+        yield return hitFlashDuration;
+        
+        spriteRenderer.material.SetFloat(hitFlash, 0f);
 
         yield return stunDuration;
         
