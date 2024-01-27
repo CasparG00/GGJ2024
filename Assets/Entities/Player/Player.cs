@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -13,6 +14,9 @@ public class Player : MonoBehaviour
     public PlayerInput PlayerInput { get; private set; }
     
     private Activity kingPreferredActivity;
+
+    private readonly WaitForSeconds stunDuration = new(0.5f);
+    private bool isStunned;
 
     private void Awake()
     {
@@ -33,5 +37,21 @@ public class Player : MonoBehaviour
     {
         Score += scorePerSecond;
         OnPlayerScoreChanged?.Invoke(scorePerSecond);
+    }
+
+    public void ExecuteStun()
+    {
+        StopCoroutine(Stun());
+        StartCoroutine(Stun());
+        Debug.Log("Hit");
+    }
+
+    private IEnumerator Stun()
+    {
+        isStunned = true;
+
+        yield return stunDuration;
+
+        isStunned = false;
     }
 }

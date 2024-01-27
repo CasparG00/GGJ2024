@@ -59,6 +59,8 @@ public class PlayerController : MonoBehaviour
         {
             // Do something with the enemy (e.g., attack, damage, etc.)
             Debug.Log("Enemy in front: " + hitCollider.gameObject.name);
+            Player player = hitCollider.GetComponent<Player>();
+            player.ExecuteStun();
         }
     }
 }
