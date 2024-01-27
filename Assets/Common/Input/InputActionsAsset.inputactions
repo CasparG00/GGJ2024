@@ -51,15 +51,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Dance 4",
-                    "type": "Button",
-                    "id": "de4d22a5-c2a8-4bb0-9810-986a611e8d71",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Join",
                     "type": "Button",
                     "id": "88afe00e-2e6c-4e66-9e5c-7286ac2aba91",
@@ -260,7 +251,7 @@
                 {
                     "name": "",
                     "id": "f8c4e8fc-1645-4c3e-b14b-3dd57b67f01c",
-                    "path": "<Gamepad>/buttonNorth",
+                    "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -282,7 +273,7 @@
                 {
                     "name": "",
                     "id": "b6844e9e-0cf7-4ce4-9c83-e899dbccc252",
-                    "path": "<Gamepad>/buttonEast",
+                    "path": "<Gamepad>/buttonNorth",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -304,33 +295,11 @@
                 {
                     "name": "",
                     "id": "66984252-a3d9-43d5-a920-c9cdae2eb11c",
-                    "path": "<Gamepad>/buttonSouth",
+                    "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Dance 3",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "6c1bda59-b57c-4172-a4db-ee3905308d14",
-                    "path": "<Keyboard>/4",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard",
-                    "action": "Dance 4",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "db5d3678-209d-46ff-8683-0569265ea6a0",
-                    "path": "<Gamepad>/buttonWest",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Dance 4",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

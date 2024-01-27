@@ -73,15 +73,6 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Dance 4"",
-                    ""type"": ""Button"",
-                    ""id"": ""de4d22a5-c2a8-4bb0-9810-986a611e8d71"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Join"",
                     ""type"": ""Button"",
                     ""id"": ""88afe00e-2e6c-4e66-9e5c-7286ac2aba91"",
@@ -282,7 +273,7 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""f8c4e8fc-1645-4c3e-b14b-3dd57b67f01c"",
-                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""path"": ""<Gamepad>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
@@ -304,7 +295,7 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""b6844e9e-0cf7-4ce4-9c83-e899dbccc252"",
-                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
@@ -326,33 +317,11 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""66984252-a3d9-43d5-a920-c9cdae2eb11c"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Dance 3"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""6c1bda59-b57c-4172-a4db-ee3905308d14"",
-                    ""path"": ""<Keyboard>/4"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""Dance 4"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""db5d3678-209d-46ff-8683-0569265ea6a0"",
-                    ""path"": ""<Gamepad>/buttonWest"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Dance 4"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -413,7 +382,6 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
         m_Player_Dance1 = m_Player.FindAction("Dance 1", throwIfNotFound: true);
         m_Player_Dance2 = m_Player.FindAction("Dance 2", throwIfNotFound: true);
         m_Player_Dance3 = m_Player.FindAction("Dance 3", throwIfNotFound: true);
-        m_Player_Dance4 = m_Player.FindAction("Dance 4", throwIfNotFound: true);
         m_Player_Join = m_Player.FindAction("Join", throwIfNotFound: true);
     }
 
@@ -481,7 +449,6 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Dance1;
     private readonly InputAction m_Player_Dance2;
     private readonly InputAction m_Player_Dance3;
-    private readonly InputAction m_Player_Dance4;
     private readonly InputAction m_Player_Join;
     public struct PlayerActions
     {
@@ -492,7 +459,6 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
         public InputAction @Dance1 => m_Wrapper.m_Player_Dance1;
         public InputAction @Dance2 => m_Wrapper.m_Player_Dance2;
         public InputAction @Dance3 => m_Wrapper.m_Player_Dance3;
-        public InputAction @Dance4 => m_Wrapper.m_Player_Dance4;
         public InputAction @Join => m_Wrapper.m_Player_Join;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
@@ -518,9 +484,6 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
             @Dance3.started += instance.OnDance3;
             @Dance3.performed += instance.OnDance3;
             @Dance3.canceled += instance.OnDance3;
-            @Dance4.started += instance.OnDance4;
-            @Dance4.performed += instance.OnDance4;
-            @Dance4.canceled += instance.OnDance4;
             @Join.started += instance.OnJoin;
             @Join.performed += instance.OnJoin;
             @Join.canceled += instance.OnJoin;
@@ -543,9 +506,6 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
             @Dance3.started -= instance.OnDance3;
             @Dance3.performed -= instance.OnDance3;
             @Dance3.canceled -= instance.OnDance3;
-            @Dance4.started -= instance.OnDance4;
-            @Dance4.performed -= instance.OnDance4;
-            @Dance4.canceled -= instance.OnDance4;
             @Join.started -= instance.OnJoin;
             @Join.performed -= instance.OnJoin;
             @Join.canceled -= instance.OnJoin;
@@ -591,7 +551,6 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
         void OnDance1(InputAction.CallbackContext context);
         void OnDance2(InputAction.CallbackContext context);
         void OnDance3(InputAction.CallbackContext context);
-        void OnDance4(InputAction.CallbackContext context);
         void OnJoin(InputAction.CallbackContext context);
     }
 }
