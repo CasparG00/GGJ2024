@@ -42,6 +42,9 @@ public class Player : MonoBehaviour
     {
         StopCoroutine(Stun());
         StartCoroutine(Stun());
+
+        Debug.Log("Hit"); 
+
     }
 
     private IEnumerator Stun()
