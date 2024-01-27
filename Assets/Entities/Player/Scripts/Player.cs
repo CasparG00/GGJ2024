@@ -7,27 +7,12 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
     public event Action<int> OnPlayerScoreChanged;
-
-    private int score;
-    public int Score {
-        get { return score; }
-        private set
-        {
-            if (score != value)
-            {
-                // Execute code after the value has changed
-                Debug.Log("Value has changed from " + score + " to " + value);
-
-                // Add your custom logic here
-
-
-                // Update the backing field
-                score = value;
-            }
-        }
-    }
+    
+    public Color Color { get; private set; }
+    public int Score { get; private set; }
 
     [SerializeField] private int scorePerSecond = 100;
+    [SerializeField] private SpriteRenderer spriteRenderer;
     
     public PlayerInput PlayerInput { get; private set; }
     
@@ -50,6 +35,12 @@ public class Player : MonoBehaviour
         King.RemovePlayer(this);
     }
 
+    public void SetColor(Color _color)
+    {
+        Color = _color;
+        spriteRenderer.material.SetColor("_Tint", _color);
+    }
+    
     public void AddScore()
     {
         Score += scorePerSecond;

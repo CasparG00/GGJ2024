@@ -19,11 +19,17 @@ public class DanceGameManager : MonoBehaviour
     private void OnEnable()
     {
         King.OnPreferredActivityChanged += OnPreferredActivityChanged;
+        
+        PlayerAssigner.OnPlayerConnected += OnPlayerConnected;
+        PlayerAssigner.OnPlayerDisconnected += OnPlayerDisconnected;
     }
     
     private void OnDisable()
     {
         King.OnPreferredActivityChanged -= OnPreferredActivityChanged;
+        
+        PlayerAssigner.OnPlayerConnected -= OnPlayerConnected;
+        PlayerAssigner.OnPlayerDisconnected -= OnPlayerDisconnected;
     }
     
     private void OnPreferredActivityChanged(Activity _activity)
@@ -47,31 +53,27 @@ public class DanceGameManager : MonoBehaviour
         }
     }
 
-    public void OnPlayerJoined(PlayerInput _playerInput)
+    private void OnPlayerConnected(Player _player)
     {
-        Player player = _playerInput.GetComponent<Player>();
-        
         if (kingPreferredActivity is Activity.Dance)
         {
             DanceGame danceGame = Instantiate(danceMovePrefab, transform);
-            danceGame.StartDanceGame(player, danceMoveSet);
+            danceGame.StartDanceGame(_player, danceMoveSet);
             
-            activeDanceGames[player] = danceGame;
+            activeDanceGames[_player] = danceGame;
 
             return;
         }
         
-        activeDanceGames[player] = null;
+        activeDanceGames[_player] = null;
     }
     
-    public void OnPlayerLeft(PlayerInput _playerInput)
+    public void OnPlayerDisconnected(Player _player)
     {
-        Player player = _playerInput.GetComponent<Player>();
-        
         if (kingPreferredActivity is Activity.Dance)
-            activeDanceGames[player].EndDanceGame();
+            activeDanceGames[_player].EndDanceGame();
 
-        activeDanceGames.Remove(player);
+        activeDanceGames.Remove(_player);
     }
 
     private void CreateDanceMoveList()

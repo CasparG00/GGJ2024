@@ -3,12 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 
 public class King : MonoBehaviour
 {
-
     /// <summary>
     /// This event gets called every time the king changes his preferred activity.
     /// The player listens to this event to update the player's knowledge of the king's preferred activity.
@@ -16,38 +13,27 @@ public class King : MonoBehaviour
     /// There's only one king so a static event is fine. 
     /// </summary>
     public static event Action<Activity> OnPreferredActivityChanged;
+    
+    private static readonly List<Player> playerList = new();
+
+    // The minimum and maximum amount of time the king will like an activity before changing his mind.
+    [SerializeField] private Vector2Int attentionSpanRange = Vector2Int.one;  
+    
+    [SerializeField] private int maximumHumor = 1000;
+    
+    [SerializeField] private int decreaseRate = 1;
+    [SerializeField] private int activitySetSize = 20;
+    
     private List<Activity> preferredActivitySet;
 
     // The index of the current preferred activity in the list.
     private int preferredActivityIndex; 
 
-    // The minimum and maximum amount of time the king will like an activity before changing his mind.
-    [SerializeField] private Vector2Int attentionSpanRange = Vector2Int.one;  
-
-    [Header("Settings")]
-    private static readonly List<Player> playerList = new();
     public float CurrentHumor { get; private set; } = 500f;
-    [SerializeField] private int maximumHumor = 1000;
-
-    [SerializeField] private Slider SliderHumor;
-    [SerializeField] private TMP_Text AssignmentText;
-
-    [SerializeField] private int decreaseRate = 1;
-    [SerializeField] private int activitySetSize = 20;
-
-    [SerializeField]
-    private Dictionary<Activity, string> EventTextDictionary = new Dictionary<Activity, string>()
-    {
-        {Activity.Dance, "Dance for me!" },
-        {Activity.Fight, "Fight for me!"},
-        { Activity.Jest, "Tell me a joke!"},
-
-    };
-
-    //Make the King a Singleton, so stuff does not need to be static.
-    private static King Instance { get; set; }
-
-
+    public int MaximumHumor => maximumHumor;
+   
+    public static King Instance { get; private set; }
+    
     private void Awake()
     {
         #region singleton
@@ -64,8 +50,6 @@ public class King : MonoBehaviour
 
         CreatePreferredActivityList();
         StartCoroutine(DequeuePreferredActivity());
-
-        SliderHumor.maxValue = maximumHumor;
     }
 
     //When enabling the King AI make sure to subscribe the Player again.
@@ -88,7 +72,6 @@ public class King : MonoBehaviour
     private void Update()
     {
         HandleHumor();
-        SliderHumor.value = CurrentHumor;
     }
 
     private IEnumerator DequeuePreferredActivity()
@@ -102,9 +85,6 @@ public class King : MonoBehaviour
             preferredActivityIndex = (preferredActivityIndex + 1) % preferredActivitySet.Count;
             
             OnPreferredActivityChanged?.Invoke(preferredActivitySet[preferredActivityIndex]);
-            
-            Debug.Log($"The king now likes {preferredActivitySet[preferredActivityIndex]}");
-            AssignmentText.text = EventTextDictionary[preferredActivitySet[preferredActivityIndex]];
         }
     }
 

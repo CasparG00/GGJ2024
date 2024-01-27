@@ -106,6 +106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scorePerSecond: 100
+  spriteRenderer: {fileID: 1186266796054212301}
 --- !u!114 &6130037896955640502
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123,6 +124,7 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 8
+  playerAnimator: {fileID: 1412261081667599865}
 --- !u!1 &7825213991510905086
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,7 +180,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 80c5f5fea9c147f4cb5ef892c3087f0f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

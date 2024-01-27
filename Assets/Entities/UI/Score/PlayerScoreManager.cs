@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -9,6 +10,18 @@ public class PlayerScoreManager : MonoBehaviour
     private List<Player> players = new();
     
     private List<PlayerScoreCell> playerScoreCells = new();
+
+    private void OnEnable()
+    {
+        PlayerAssigner.OnPlayerConnected += OnPlayerConnected;
+        PlayerAssigner.OnPlayerDisconnected += OnPlayerDisconnected;
+    }
+    
+    private void OnDisable()
+    {
+        PlayerAssigner.OnPlayerConnected -= OnPlayerConnected;
+        PlayerAssigner.OnPlayerDisconnected -= OnPlayerDisconnected;
+    }
 
     private void ResetCells()
     {
@@ -35,22 +48,20 @@ public class PlayerScoreManager : MonoBehaviour
         }
     }
     
-    public void OnPlayerJoined(PlayerInput _playerInput)
+    private void OnPlayerConnected(Player _player)
     {
-        Player player = _playerInput.GetComponent<Player>();
-        players.Add(player);
+        players.Add(_player);
         
-        player.OnPlayerScoreChanged += RefreshCells;
+        _player.OnPlayerScoreChanged += RefreshCells;
         
         ResetCells();
     }
     
-    public void OnPlayerLeft(PlayerInput _playerInput)
+    private void OnPlayerDisconnected(Player _player)
     {
-        Player player = _playerInput.GetComponent<Player>();
-        players.Remove(player);
+        players.Remove(_player);
         
-        player.OnPlayerScoreChanged -= RefreshCells;
+        _player.OnPlayerScoreChanged -= RefreshCells;
         
         ResetCells();
     }

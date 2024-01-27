@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,6 +12,9 @@ public class PlayerController : MonoBehaviour
 
     private InputAction moveAction;
     private InputAction punchAction;
+    
+    private Dictionary<int, InputAction> danceMoveActions = new();
+
 
     // Unity has a depricated variable built in for rigidbodies, so we need to hide that.
     private new Rigidbody2D rigidbody;
@@ -18,6 +22,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float punchDistance = 2f;
     [SerializeField] private LayerMask playerLayer;
+    
+    [SerializeField] private PlayerAnimator playerAnimator;
 
     public bool canMove = true;
 
@@ -31,12 +37,21 @@ public class PlayerController : MonoBehaviour
         punchAction = playerInput.actions.FindAction("Punch");
 
         canMove = true;
+
+        // Reset the dictionary and add all dance move actions.
+        danceMoveActions ??= new Dictionary<int, InputAction>();
+        danceMoveActions.Clear();
+
+        danceMoveActions[1] = playerInput.actions.FindAction("Dance 1");
+        danceMoveActions[2] = playerInput.actions.FindAction("Dance 2");
+        danceMoveActions[3] = playerInput.actions.FindAction("Dance 3");
     }
 
     private void FixedUpdate()
     {
         if (!canMove)
             return;
+        
         float input = moveAction.ReadValue<float>();
         rigidbody.velocity = Vector2.right * (input * moveSpeed);
     }
@@ -49,6 +64,17 @@ public class PlayerController : MonoBehaviour
         if (punchAction.triggered)
         {
             CheckPunch();
+        }
+
+        if (danceMoveActions.Count != 0)
+        {
+            foreach (var element in danceMoveActions)
+            {
+                if (element.Value.triggered)
+                {
+                    playerAnimator.TriggerPose(element.Key);
+                }
+            }
         }
     }
     //TODO: Add punch 
