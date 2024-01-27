@@ -58,7 +58,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
-  m_Name: alagard SDF
+  m_Name: alagard SDF Dialogue
   m_EditorClassIdentifier: 
   hashCode: -1616901139
   material: {fileID: 4557123691465075712}

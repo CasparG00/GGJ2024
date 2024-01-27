@@ -7,7 +7,25 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
     public event Action<int> OnPlayerScoreChanged;
-    public int Score { get; private set; }
+
+    private int score;
+    public int Score {
+        get { return score; }
+        private set
+        {
+            if (score != value)
+            {
+                // Execute code after the value has changed
+                Debug.Log("Value has changed from " + score + " to " + value);
+
+                // Add your custom logic here
+
+
+                // Update the backing field
+                score = value;
+            }
+        }
+    }
 
     [SerializeField] private int scorePerSecond = 100;
     

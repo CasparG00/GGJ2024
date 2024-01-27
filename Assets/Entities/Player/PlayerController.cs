@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float punchDistance = 2f;
     [SerializeField] private LayerMask playerLayer;
 
+    public bool canMove = true;
+
     private void Awake()
     {
         player = GetComponent<Player>();
@@ -28,16 +30,22 @@ public class PlayerController : MonoBehaviour
         moveAction = playerInput.actions.FindAction("Move");
         punchAction = playerInput.actions.FindAction("Punch");
 
+        canMove = true;
     }
 
     private void FixedUpdate()
     {
+        if (!canMove)
+            return;
         float input = moveAction.ReadValue<float>();
         rigidbody.velocity = Vector2.right * (input * moveSpeed);
     }
 
     private void Update()
     {
+        if (!canMove)
+            return;
+
         if (punchAction.triggered)
         {
             CheckPunch();
