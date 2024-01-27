@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,35 +12,66 @@ public class DanceGameManager : MonoBehaviour
     [SerializeField] private int danceMoveSetSize = 10;
     
     private List<DanceMove> danceMoveSet;
-    private readonly Dictionary<PlayerInput, DanceGame> activeDanceGames = new();
+    private readonly Dictionary<Player, DanceGame> activeDanceGames = new();
+    
+    private Activity kingPreferredActivity = Activity.Idle;
 
     private void OnEnable()
     {
-        CreateDanceMoveList();
+        King.OnPreferredActivityChanged += OnPreferredActivityChanged;
     }
     
     private void OnDisable()
     {
-        foreach (var element in activeDanceGames)
-        {
-            element.Value.EndDanceGame();
-        }
-        
-        activeDanceGames.Clear();
-    }
-
-    public void OnPlayerJoined(PlayerInput _player)
-    {
-        DanceGame danceGame = Instantiate(danceMovePrefab, transform);
-        danceGame.StartDanceGame(_player, danceMoveSet);
-            
-        activeDanceGames[_player] = danceGame;
+        King.OnPreferredActivityChanged -= OnPreferredActivityChanged;
     }
     
-    public void OnPlayerLeft(PlayerInput _player)
+    private void OnPreferredActivityChanged(Activity _activity)
     {
-        activeDanceGames[_player].EndDanceGame();
-        activeDanceGames.Remove(_player);
+        kingPreferredActivity = _activity;
+        
+        if (kingPreferredActivity is Activity.Dance)
+        {
+            CreateDanceMoveList();
+        }
+        else
+        {
+            foreach (var element in activeDanceGames)
+            {
+                bool isDanceGameActive = element.Value != null;
+                if (isDanceGameActive)
+                {
+                    element.Value.EndDanceGame();
+                }
+            }
+        }
+    }
+
+    public void OnPlayerJoined(PlayerInput _playerInput)
+    {
+        Player player = _playerInput.GetComponent<Player>();
+        
+        if (kingPreferredActivity is Activity.Dance)
+        {
+            DanceGame danceGame = Instantiate(danceMovePrefab, transform);
+            danceGame.StartDanceGame(player, danceMoveSet);
+            
+            activeDanceGames[player] = danceGame;
+
+            return;
+        }
+        
+        activeDanceGames[player] = null;
+    }
+    
+    public void OnPlayerLeft(PlayerInput _playerInput)
+    {
+        Player player = _playerInput.GetComponent<Player>();
+        
+        if (kingPreferredActivity is Activity.Dance)
+            activeDanceGames[player].EndDanceGame();
+
+        activeDanceGames.Remove(player);
     }
 
     private void CreateDanceMoveList()
@@ -53,20 +85,19 @@ public class DanceGameManager : MonoBehaviour
         }
 
         // Update all active dance games.
-        foreach (var element in activeDanceGames)
+        List<Player> players = activeDanceGames.Keys.ToList();
+        foreach (var player in players)
         {
             // If a player has left the dance game will be null.
             // In this case a new one needs to be created.
-            if (element.Value == null)
+            if (activeDanceGames[player] == null)
             {
                 DanceGame danceGame = Instantiate(danceMovePrefab, transform);
-                danceGame.StartDanceGame(element.Key, danceMoveSet);
-                
-                activeDanceGames[element.Key] = danceGame;
+                activeDanceGames[player] = danceGame;
             }
             
             // Reinitialize the dance game.
-            activeDanceGames[element.Key].StartDanceGame(element.Key, danceMoveSet);
+            activeDanceGames[player].StartDanceGame(player, danceMoveSet);
         }
     }
 }

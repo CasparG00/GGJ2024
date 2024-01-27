@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(PlayerInput))]
 public class Player : MonoBehaviour
 {
     public event Action<int> OnPlayerScoreChanged;
@@ -9,37 +10,28 @@ public class Player : MonoBehaviour
 
     [SerializeField] private int scorePerSecond = 100;
     
+    public PlayerInput PlayerInput { get; private set; }
+    
     private Activity kingPreferredActivity;
-    // TODO: Remove default value.
-    private Activity performingActivity = Activity.Fight;
+
+    private void Awake()
+    {
+        PlayerInput = GetComponent<PlayerInput>();
+    }
     
     private void OnEnable()
     {
-        King.OnPreferredActivityChanged += OnPreferredActivityChanged;
         King.AddPlayer(this);
     }
 
     private void OnDisable()
     {
-        King.OnPreferredActivityChanged -= OnPreferredActivityChanged;
         King.RemovePlayer(this);
     }
 
-    private void Update()
+    public void AddScore()
     {
-        // TODO: Change this check to actually check the action.
-        if (Keyboard.current.spaceKey.wasPressedThisFrame)
-        {
-            if (kingPreferredActivity == performingActivity)
-            {
-                Score += scorePerSecond;
-                OnPlayerScoreChanged?.Invoke(scorePerSecond);
-            }
-        }
-    }
-
-    private void OnPreferredActivityChanged(Activity _preferred)
-    {
-        kingPreferredActivity = _preferred;
+        Score += scorePerSecond;
+        OnPlayerScoreChanged?.Invoke(scorePerSecond);
     }
 }

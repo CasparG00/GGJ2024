@@ -24,10 +24,10 @@ public class King : MonoBehaviour
 
     //Player Settings
     private static readonly List<Player> playerList = new();
-    public float CurrentHumor { get; private set; }
+    public float CurrentHumor { get; private set; } = 500f;
 
     [SerializeField] private int decreaseRate = 1;
-    [SerializeField] private int activitySize = 20;
+    [SerializeField] private int activitySetSize = 20;
 
     //Make the King a Singleton, so stuff does not need to be static.
     private static King Instance { get; set; }
@@ -50,29 +50,26 @@ public class King : MonoBehaviour
         StartCoroutine(DequeuePreferredActivity());
     }
 
-  
-
     //When enabling the King AI make sure to subscribe the Player again.
     private void OnEnable()
     {
-        foreach (var _player in playerList)
+        foreach (var player in playerList)
         {
-            _player.OnPlayerScoreChanged += OnPlayerScoreChanged;
+            player.OnPlayerScoreChanged += OnPlayerScoreChanged;
         }
     }
 
     private void OnDisable()
     {
-        foreach (var _player in playerList)
+        foreach (var player in playerList)
         {
-            _player.OnPlayerScoreChanged -= OnPlayerScoreChanged;
+            player.OnPlayerScoreChanged -= OnPlayerScoreChanged;
         }
     }
 
     private void Update()
     {
         HandleHumor();
-       
     }
 
     private IEnumerator DequeuePreferredActivity()
@@ -83,9 +80,11 @@ public class King : MonoBehaviour
             
             // Add one to the index.
             // Then use the modulo to set the index back to 0 if it's greater than the length of the list.
-            preferredActivityIndex = preferredActivityIndex++ % preferredActivitySet.Count;
+            preferredActivityIndex = (preferredActivityIndex + 1) % preferredActivitySet.Count;
             
             OnPreferredActivityChanged?.Invoke(preferredActivitySet[preferredActivityIndex]);
+            
+            Debug.Log($"The king now likes {preferredActivitySet[preferredActivityIndex]}");
         }
     }
 
@@ -93,7 +92,7 @@ public class King : MonoBehaviour
     {
         preferredActivitySet = new List<Activity>();
         
-        for (int i = 0; i < activitySize; i++)
+        for (int i = 0; i < activitySetSize; i++)
         {
             // Every loop we create a list of all possible activities.
             List<Activity> possibleActivities = new((Activity[])Enum.GetValues(typeof(Activity)));
@@ -135,5 +134,4 @@ public class King : MonoBehaviour
     {
         CurrentHumor -= decreaseRate * Time.deltaTime;
     }
-
 }

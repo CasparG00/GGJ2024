@@ -10,7 +10,7 @@ public class DanceGame : MonoBehaviour
     [SerializeField] private DanceMoveHint danceMoveHintPrefab;
     [SerializeField] private int maximumDanceMoveHints = 5;
     
-    private PlayerInput owner;
+    private Player owner;
     private List<DanceMove> danceMoveSet;
     
     private int danceMoveIndex;
@@ -19,7 +19,7 @@ public class DanceGame : MonoBehaviour
     // The value is the action that triggers the dance move.
     private Dictionary<int, InputAction> danceMoveActions = new();
     
-    private Queue<DanceMoveHint> danceMoveHints = new();
+    private Queue<DanceMoveHint> danceMoveHintsQueue = new();
     
     private readonly WaitForSeconds stunDuration = new(0.5f);
     private bool isStunned;
@@ -41,7 +41,7 @@ public class DanceGame : MonoBehaviour
         }
     }
     
-    public void StartDanceGame(PlayerInput _owner, List<DanceMove> _set)
+    public void StartDanceGame(Player _owner, List<DanceMove> _set)
     {
         owner = _owner;
         danceMoveSet = _set;
@@ -49,12 +49,17 @@ public class DanceGame : MonoBehaviour
         
         SetDanceMoveActions();
 
+        foreach (var hint in danceMoveHintsQueue)
+        {
+            Destroy(hint.gameObject);
+        }
+        
         // Create a bunch of dance move hints.
         for (int i = 0; i < maximumDanceMoveHints; i++)
         {
             DanceMoveHint danceMoveObject = Instantiate(danceMoveHintPrefab, danceMoveHintContainer);
             danceMoveObject.SetSprite(danceMoveSet[i % danceMoveSet.Count].sprite);
-            danceMoveHints.Enqueue(danceMoveObject);
+            danceMoveHintsQueue.Enqueue(danceMoveObject);
         }
     }
     
@@ -69,18 +74,17 @@ public class DanceGame : MonoBehaviour
         danceMoveActions ??= new Dictionary<int, InputAction>();
         danceMoveActions.Clear();
 
-        danceMoveActions[1] = owner.actions.FindAction("Dance 1");
-        danceMoveActions[2] = owner.actions.FindAction("Dance 2");
-        danceMoveActions[3] = owner.actions.FindAction("Dance 3");
+        danceMoveActions[1] = owner.PlayerInput.actions.FindAction("Dance 1");
+        danceMoveActions[2] = owner.PlayerInput.actions.FindAction("Dance 2");
+        danceMoveActions[3] = owner.PlayerInput.actions.FindAction("Dance 3");
     }
     
     private void OnDanceMovePressed(int _id)
     {
-        bool pressedCorrectDanceMove = _id == danceMoveSet[danceMoveIndex].id;
-        if (pressedCorrectDanceMove)
+        if (_id == danceMoveSet[danceMoveIndex].id)
         {
             // The first dance move hint in the queue is always the one we just pressed.
-            DanceMoveHint danceMoveObject = danceMoveHints.Dequeue();
+            DanceMoveHint danceMoveObject = danceMoveHintsQueue.Dequeue();
             danceMoveObject.TriggerDespawn();
             
             // Spawn a new dance move hint and put it in the back of the queue.
@@ -88,7 +92,9 @@ public class DanceGame : MonoBehaviour
             danceMoveObject = Instantiate(danceMoveHintPrefab, danceMoveHintContainer);
             danceMoveObject.SetSprite(danceMoveSet[offsetIndex].sprite);
             
-            danceMoveHints.Enqueue(danceMoveObject);
+            danceMoveHintsQueue.Enqueue(danceMoveObject);
+            
+            owner.AddScore();
             
             danceMoveIndex = (danceMoveIndex + 1) % danceMoveSet.Count;
         }
