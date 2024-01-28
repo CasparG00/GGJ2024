@@ -76,10 +76,15 @@ public class Player : MonoBehaviour
         if (isInvulnerable)
             return false;
         
-        StopCoroutine(Stun());
-        StartCoroutine(Stun());
+        TriggerStun();
 
         return true;
+    }
+
+    public void TriggerStun()
+    {
+        StopCoroutine(Stun());
+        StartCoroutine(Stun());
     }
 
     public void TriggerInvulnerability()

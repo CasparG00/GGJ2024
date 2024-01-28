@@ -97,7 +97,7 @@ public class DanceGame : MonoBehaviour
         }
         else
         {
-            owner.TryHit();
+            owner.TriggerStun();
         }
     }
 }
