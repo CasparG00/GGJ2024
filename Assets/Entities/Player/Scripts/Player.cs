@@ -19,25 +19,44 @@ public class Player : MonoBehaviour
 
     [SerializeField] private int scorePerSecond = 100;
     [SerializeField] private SpriteRenderer spriteRenderer;
+
+    private PlayerInput playerInput;
+    public PlayerInput PlayerInput
+    {
+        get
+        {
+            if (!playerInput)
+            {
+                playerInput = GetComponent<PlayerInput>();
+            }
+            
+            return playerInput;
+        }
+    }
     
-    public PlayerInput PlayerInput { get; private set; }
+    public Activity KingPreferredActivity { get; private set; } = Activity.Idle;
     
     private readonly WaitForSeconds hitFlashDuration = new(HitFlashDuration);
     private readonly WaitForSeconds stunDuration = new(StunDuration - HitFlashDuration);
-    
-    private void Awake()
-    {
-        PlayerInput = GetComponent<PlayerInput>();
-    }
+    private readonly WaitForSeconds poseInvulnerabilityDuration = new(0.2f);
+
+    private bool isInvulnerable;
     
     private void OnEnable()
     {
         King.AddPlayer(this);
+        King.OnPreferredActivityChanged += OnPreferredActivityChanged;
     }
 
     private void OnDisable()
     {
         King.RemovePlayer(this);
+        King.OnPreferredActivityChanged -= OnPreferredActivityChanged;
+    }
+    
+    private void OnPreferredActivityChanged(Activity _activity)
+    {
+        KingPreferredActivity = _activity;
     }
 
     public void SetColor(Color _color)
@@ -52,10 +71,30 @@ public class Player : MonoBehaviour
         OnPlayerScoreChanged?.Invoke(scorePerSecond);
     }
 
-    public void Hit()
+    public bool TryHit()
     {
+        if (isInvulnerable)
+            return false;
+        
         StopCoroutine(Stun());
         StartCoroutine(Stun());
+
+        return true;
+    }
+
+    public void TriggerInvulnerability()
+    {
+        StopCoroutine(PerformInvulnerability());
+        StartCoroutine(PerformInvulnerability());
+    }
+    
+    private IEnumerator PerformInvulnerability()
+    {
+        isInvulnerable = true;
+        
+        yield return poseInvulnerabilityDuration;
+        
+        isInvulnerable = false;
     }
 
     private IEnumerator Stun()

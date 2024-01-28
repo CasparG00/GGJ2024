@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour
     private readonly RaycastHit2D[] punchResults = new RaycastHit2D[5];
     
     private readonly WaitForSeconds punchDelay = new(0.3f);
+    private readonly WaitForSeconds punchCooldown = new(0.5f);
     private bool currentlyPunching;
 
     private void Awake()
@@ -71,6 +72,7 @@ public class PlayerController : MonoBehaviour
                 if (element.Value.triggered)
                 {
                     playerAnimator.TriggerPose(element.Key);
+                    player.TriggerInvulnerability();
                 }
             }
         }
@@ -100,13 +102,19 @@ public class PlayerController : MonoBehaviour
                 if (otherPlayer == player)
                     continue;
                 
-                player.AddScore();
-                otherPlayer.Hit();
+                if (!otherPlayer.TryHit())
+                    continue;
+
                 source.Play();
+
+                if (player.KingPreferredActivity is Activity.Fight)
+                    player.AddScore();
             }
         }
 
         playerAnimator.TriggerPunch(System.Math.Sign(punchDirection.x));
+
+        yield return punchCooldown;
         
         playerInput.ActivateInput();
         

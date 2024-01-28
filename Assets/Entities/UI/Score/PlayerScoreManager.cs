@@ -37,7 +37,8 @@ public class PlayerScoreManager : MonoBehaviour
     {
         foreach (var playerScoreCell in playerScoreCells)
         {
-            Destroy(playerScoreCell.gameObject);
+            if (playerScoreCell)
+                Destroy(playerScoreCell.gameObject);
         }
         
         playerScoreCells.Clear();

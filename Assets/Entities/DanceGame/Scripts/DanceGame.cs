@@ -70,7 +70,7 @@ public class DanceGame : MonoBehaviour
         // Reset the dictionary and add all dance move actions.
         danceMoveActions ??= new Dictionary<int, InputAction>();
         danceMoveActions.Clear();
-
+        
         danceMoveActions[1] = owner.PlayerInput.actions.FindAction("Dance 1");
         danceMoveActions[2] = owner.PlayerInput.actions.FindAction("Dance 2");
         danceMoveActions[3] = owner.PlayerInput.actions.FindAction("Dance 3");
@@ -97,7 +97,7 @@ public class DanceGame : MonoBehaviour
         }
         else
         {
-            owner.Hit();
+            owner.TryHit();
         }
     }
 }

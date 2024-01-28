@@ -83,6 +83,8 @@ public class JokesGame : MonoBehaviour
             selectButtonList.Add(button);
         }
         
+        currentSelectButtonIndex = 0;
+        
         selectedJokeList.Clear();
         
         currentSentence = 0;
@@ -114,7 +116,7 @@ public class JokesGame : MonoBehaviour
             }
             else
             {
-                owner.Hit();
+                owner.TryHit();
             }
         }
         

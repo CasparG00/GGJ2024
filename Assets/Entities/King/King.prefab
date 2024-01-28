@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attentionSpanRange: {x: 10, y: 15}
-  maximumHumor: 5000
+  maximumHumor: 10000
   decreaseRate: 100
   activitySetSize: 20
   animator: {fileID: 5468923158943654169}

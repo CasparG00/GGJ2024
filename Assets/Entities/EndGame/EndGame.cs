@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -27,6 +28,22 @@ public class EndGame : MonoBehaviour
         
         King.OnHumorLimitReached -= OnHumorLimitReached;
     }
+
+    private void Update()
+    {
+        if (content.gameObject.activeSelf == false)
+        {
+            return;
+        }
+        
+        foreach (var player in players)
+        {
+            if (player.PlayerInput.actions.FindAction("Join").triggered)
+            {
+                BackToMenu();
+            }
+        }
+    }
     
     private void OnPlayerConnected(Player _player)
     {
@@ -47,10 +64,12 @@ public class EndGame : MonoBehaviour
     {
         titleText.text = _win ? "The king is satisfied!" : "The king is NOT satisfied.";
         
+        Player winningPlayer = players.OrderByDescending(_player => _player.Score).First();
+        
         foreach (var player in players)
         {
             ScoreCard scoreCard = Instantiate(scoreCardPrefab, scoreCardContainer);
-            scoreCard.Refresh(player, _win);
+            scoreCard.Refresh(player, player == winningPlayer);
         }
         
         content.gameObject.SetActive(true);
