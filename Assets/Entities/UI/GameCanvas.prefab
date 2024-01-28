@@ -196,8 +196,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 50}
+  m_SizeDelta: {x: 0, y: -100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5398255376229474389
 MonoBehaviour:
@@ -240,10 +240,16 @@ MonoBehaviour:
   danceMoves:
   - id: 1
     sprite: {fileID: 21300000, guid: 5faf7f469dcf05b4eb9b9c7f3f47c554, type: 3}
+    keyboardButton: {fileID: 21300000, guid: cecf49cb882daec4fa6c1283db823a4c, type: 3}
+    controllerButton: {fileID: 21300000, guid: 75e4d1465419bc04c926e42391da74db, type: 3}
   - id: 2
     sprite: {fileID: 21300000, guid: 494c9ab48f5bcaf40a68df1de9c6a2f5, type: 3}
+    keyboardButton: {fileID: 21300000, guid: 22db146399f9d7d4b8b3ab60d55cd7cb, type: 3}
+    controllerButton: {fileID: 21300000, guid: 4cac15e427328c64391ab42947ab5c96, type: 3}
   - id: 3
     sprite: {fileID: 21300000, guid: da14d85396376bc47b7fa2c20e0b018c, type: 3}
+    keyboardButton: {fileID: 21300000, guid: 559a7d55804eac042985c318addafeb5, type: 3}
+    controllerButton: {fileID: 21300000, guid: 8ce8d8b56d09d3c44978746a9aef442b, type: 3}
   danceMovePrefab: {fileID: 753560346313387980, guid: 0ce79ddd485d4c94191bfc2d9fde4c76, type: 3}
   danceMoveSetSize: 8
 --- !u!1001 &5830520547364645677

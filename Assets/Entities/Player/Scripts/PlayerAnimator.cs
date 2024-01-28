@@ -10,6 +10,8 @@ public class PlayerAnimator : MonoBehaviour
     private static readonly int posing1 = Animator.StringToHash("Posing1");
     private static readonly int posing2 = Animator.StringToHash("Posing2");
     private static readonly int posing3 = Animator.StringToHash("Posing3");
+    private static readonly int punching = Animator.StringToHash("Punch");
+    private static readonly int punchDirection = Animator.StringToHash("PunchDirection");
 
     private void Awake()
     {
@@ -33,5 +35,11 @@ public class PlayerAnimator : MonoBehaviour
         };
         
         animator.SetTrigger(hash);
+    }
+    
+    public void TriggerPunch(int _direction)
+    {
+        animator.SetTrigger(punching);
+        animator.SetFloat(punchDirection, _direction);
     }
 }

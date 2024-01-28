@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -15,7 +16,6 @@ public class PlayerController : MonoBehaviour
     
     private Dictionary<int, InputAction> danceMoveActions = new();
 
-
     // Unity has a depricated variable built in for rigidbodies, so we need to hide that.
     private new Rigidbody2D rigidbody;
 
@@ -24,8 +24,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask playerLayer;
     
     [SerializeField] private PlayerAnimator playerAnimator;
-
-    public bool canMove = true;
+    
+    private Vector2 punchDirection = Vector2.right;
+    private readonly RaycastHit2D[] punchResults = new RaycastHit2D[5];
+    
+    private readonly WaitForSeconds punchDelay = new(0.3f);
+    private bool currentlyPunching;
 
     private void Awake()
     {
@@ -35,8 +39,6 @@ public class PlayerController : MonoBehaviour
 
         moveAction = playerInput.actions.FindAction("Move");
         punchAction = playerInput.actions.FindAction("Punch");
-
-        canMove = true;
 
         // Reset the dictionary and add all dance move actions.
         danceMoveActions ??= new Dictionary<int, InputAction>();
@@ -49,21 +51,15 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!canMove)
-            return;
-        
         float input = moveAction.ReadValue<Vector2>().x;
         rigidbody.velocity = Vector2.right * (input * moveSpeed);
     }
 
     private void Update()
     {
-        if (!canMove)
-            return;
-
-        if (punchAction.triggered)
+        if (punchAction.triggered && !currentlyPunching)
         {
-            CheckPunch();
+            StartCoroutine(PerformPunch());
         }
 
         if (danceMoveActions.Count != 0)
@@ -79,32 +75,39 @@ public class PlayerController : MonoBehaviour
     }
     //TODO: Add punch 
 
-    private void CheckPunch()
+    private IEnumerator PerformPunch()
     {
-        // Get the player's position
-        Vector2 playerPosition = transform.position;
+        currentlyPunching = true;
 
-        Vector2 playerDirection = rigidbody.transform.right;
-        // Calculate the position in front of the player based on the direction they are facing
-        Vector2 detectionPosition = playerPosition + (playerDirection * punchDistance);
-
-        // Check for enemies in the detection position
-        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(detectionPosition, 1f, playerLayer);
-
-        foreach (Collider2D hitCollider in hitColliders)
+        if (Mathf.Abs(rigidbody.velocity.x) > 0.1f)
         {
-            // Do something with the enemy (e.g., attack, damage, etc.)
-            Player otherPlayer = hitCollider.GetComponentInParent<Player>();
-            
-            if (otherPlayer == null || otherPlayer == player)
-                continue;
-            
-            otherPlayer.Hit();
+            punchDirection = rigidbody.velocity.x >= 0 ? Vector2.right : Vector2.left;
+        }
+        
+        playerInput.DeactivateInput();
+        
+        yield return punchDelay;
+        
+        int size = Physics2D.RaycastNonAlloc(rigidbody.worldCenterOfMass, punchDirection, punchResults, punchDistance, playerLayer);
+        if (size == 0)
+            yield break;
 
-            if (player.KingPreferredActivity is Activity.Fight)
+        for (int i = 0; i < size; i++)
+        {
+            if (punchResults[i].transform.TryGetComponent(out Player otherPlayer))
             {
+                if (otherPlayer == player)
+                    continue;
+                
                 player.AddScore();
+                otherPlayer.Hit();
             }
         }
+
+        playerAnimator.TriggerPunch(System.Math.Sign(punchDirection.x));
+        
+        playerInput.ActivateInput();
+        
+        currentlyPunching = false;
     }
 }

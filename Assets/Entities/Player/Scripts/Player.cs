@@ -22,8 +22,6 @@ public class Player : MonoBehaviour
     
     public PlayerInput PlayerInput { get; private set; }
     
-    public Activity KingPreferredActivity { get; private set; }
-
     private readonly WaitForSeconds hitFlashDuration = new(HitFlashDuration);
     private readonly WaitForSeconds stunDuration = new(StunDuration - HitFlashDuration);
     
@@ -64,14 +62,19 @@ public class Player : MonoBehaviour
     {
         PlayerInput.DeactivateInput();
 
+        yield return HitFlash();
+
+        yield return stunDuration;
+        
+        PlayerInput.ActivateInput();
+    }
+    
+    private IEnumerator HitFlash()
+    {
         spriteRenderer.material.SetFloat(hitFlash, 1f);
         
         yield return hitFlashDuration;
         
         spriteRenderer.material.SetFloat(hitFlash, 0f);
-
-        yield return stunDuration;
-        
-        PlayerInput.ActivateInput();
     }
 }
