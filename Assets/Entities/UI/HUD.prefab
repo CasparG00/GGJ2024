@@ -76,6 +76,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerScoreCellPrefab: {fileID: 6618086628787815625, guid: dd46c7689db84cb48a00133b725ea4fb, type: 3}
+  players: []
 --- !u!1 &2760538277678111135
 GameObject:
   m_ObjectHideFlags: 0
@@ -179,8 +180,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
-  - {fileID: 2790217264205637003}
   - {fileID: 4005985768808709719}
+  - {fileID: 2790217264205637003}
   m_Father: {fileID: 6146664003583399907}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -578,7 +579,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 8899a65f2ba208542aad4a2ad343a072, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
