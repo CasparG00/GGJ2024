@@ -13,8 +13,7 @@ public class JokesGameManager : MonoBehaviour
     private void OnEnable()
     {
         King.OnPreferredActivityChanged += OnPreferredActivityChanged;
-        King.KingHappy += OnGameOver;
-        King.KingAngry += OnGameOver;
+        King.OnHumorLimitReached += OnHumorLimitReached;
         
         PlayerAssigner.OnPlayerConnected += OnPlayerConnected;
         PlayerAssigner.OnPlayerDisconnected += OnPlayerDisconnected;
@@ -23,14 +22,13 @@ public class JokesGameManager : MonoBehaviour
     private void OnDisable()
     {
         King.OnPreferredActivityChanged -= OnPreferredActivityChanged;
-        King.KingHappy += OnGameOver;
-        King.KingAngry += OnGameOver;
+        King.OnHumorLimitReached += OnHumorLimitReached;
         
         PlayerAssigner.OnPlayerConnected -= OnPlayerConnected;
         PlayerAssigner.OnPlayerDisconnected -= OnPlayerDisconnected;
     }
     
-    private void OnGameOver()
+    private void OnHumorLimitReached(bool _win)
     {
         EndAllJokesGames();
     }

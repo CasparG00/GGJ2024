@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerScoreManager : MonoBehaviour
 {
@@ -13,14 +11,26 @@ public class PlayerScoreManager : MonoBehaviour
 
     private void OnEnable()
     {
+        King.OnHumorLimitReached += OnHumorLimitReached;
+        
         PlayerAssigner.OnPlayerConnected += OnPlayerConnected;
         PlayerAssigner.OnPlayerDisconnected += OnPlayerDisconnected;
     }
     
     private void OnDisable()
     {
+        King.OnHumorLimitReached -= OnHumorLimitReached;
+        
         PlayerAssigner.OnPlayerConnected -= OnPlayerConnected;
         PlayerAssigner.OnPlayerDisconnected -= OnPlayerDisconnected;
+    }
+    
+    private void OnHumorLimitReached(bool _win)
+    {
+        foreach (var playerScoreCell in playerScoreCells)
+        {
+            Destroy(playerScoreCell.gameObject);
+        }
     }
 
     private void ResetCells()

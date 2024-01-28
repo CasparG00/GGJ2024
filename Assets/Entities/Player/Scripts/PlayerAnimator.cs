@@ -39,7 +39,7 @@ public class PlayerAnimator : MonoBehaviour
     
     public void TriggerPunch(int _direction)
     {
-        animator.SetTrigger(punching);
         animator.SetFloat(punchDirection, _direction);
+        animator.SetTrigger(punching);
     }
 }

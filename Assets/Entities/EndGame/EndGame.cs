@@ -17,8 +17,7 @@ public class EndGame : MonoBehaviour
         PlayerAssigner.OnPlayerConnected += OnPlayerConnected;
         PlayerAssigner.OnPlayerDisconnected += OnPlayerDisconnected;
         
-        King.KingHappy += KingHappy;
-        King.KingAngry += KingAngry;
+        King.OnHumorLimitReached += OnHumorLimitReached;
     }
 
     private void OnDisable()
@@ -26,8 +25,7 @@ public class EndGame : MonoBehaviour
         PlayerAssigner.OnPlayerConnected -= OnPlayerConnected;
         PlayerAssigner.OnPlayerDisconnected -= OnPlayerDisconnected;
         
-        King.KingHappy -= KingHappy;
-        King.KingAngry -= KingAngry;    
+        King.OnHumorLimitReached -= OnHumorLimitReached;
     }
     
     private void OnPlayerConnected(Player _player)
@@ -40,21 +38,14 @@ public class EndGame : MonoBehaviour
         players.Remove(_player);
     }
 
-    private void KingHappy()
+    private void OnHumorLimitReached(bool _win)
     {
-        ShowGameOver(true);
-    }
-
-    private void KingAngry()
-    {
-        ShowGameOver(false);
+        ShowGameOver(_win);
     }
 
     private void ShowGameOver(bool _win)
     {
-        Debug.Log(1);
-        
-        titleText.text = _win ? "The king is NOT satisfied." : "The king is satisfied!";
+        titleText.text = _win ? "The king is satisfied!" : "The king is NOT satisfied.";
         
         foreach (var player in players)
         {

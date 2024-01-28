@@ -41,7 +41,10 @@ public class KingSpeech : MonoBehaviour
 
     private void OnPreferredActivityChanged(Activity _activity)
     {
-        StartCoroutine(ShowSpeechBubble(_activity));
+        if (_activity is not Activity.Idle)
+        {
+            StartCoroutine(ShowSpeechBubble(_activity));
+        }
     }
     
     private IEnumerator ShowSpeechBubble(Activity _activity)

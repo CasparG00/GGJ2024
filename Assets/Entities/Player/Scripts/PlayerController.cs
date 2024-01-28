@@ -73,7 +73,6 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    //TODO: Add punch 
 
     private IEnumerator PerformPunch()
     {

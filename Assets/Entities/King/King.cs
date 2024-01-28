@@ -13,8 +13,7 @@ public class King : MonoBehaviour
     /// There's only one king so a static event is fine. 
     /// </summary>
     public static event Action<Activity> OnPreferredActivityChanged;
-    public static event Action KingHappy;
-    public static event Action KingAngry;
+    public static event Action<bool> OnHumorLimitReached;
 
     private static readonly List<Player> playerList = new();
 
@@ -89,7 +88,7 @@ public class King : MonoBehaviour
         {
             CurrentHumor = maximumHumor;
             
-            KingHappy?.Invoke();
+            OnHumorLimitReached?.Invoke(true);
             OnPreferredActivityChanged?.Invoke(Activity.Idle);
 
             gameEnded = true;
@@ -101,7 +100,7 @@ public class King : MonoBehaviour
         {
             CurrentHumor = 0;
 
-            KingAngry?.Invoke();
+            OnHumorLimitReached?.Invoke(false);
             OnPreferredActivityChanged?.Invoke(Activity.Idle);
             
 
