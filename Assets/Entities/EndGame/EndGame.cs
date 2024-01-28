@@ -1,73 +1,72 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class EndGame : MonoBehaviour
 {
-    [SerializeField] private GameObject fadeImage;
-    [SerializeField] private PlayerScoreManager scoreManager;
-    [SerializeField] private GameObject gameOverText;
-    [SerializeField] private GameObject menuButton;
-
-    [SerializeField] private GameObject playerImage;
-    [SerializeField] private TextMeshProUGUI[] playerText;
+    [SerializeField] private RectTransform content;
+    [SerializeField] private TextMeshProUGUI titleText;
+    [SerializeField] private ScoreCard scoreCardPrefab;
+    [SerializeField] private RectTransform scoreCardContainer;
 
     private List<Player> players = new();
-
-    private int player1Score;
-    private int player2Score;
-
-    private Player player;
-    private void FixedUpdate()
-    {
-        
-    }
-
+    
     private void OnEnable()
     {
+        PlayerAssigner.OnPlayerConnected += OnPlayerConnected;
+        PlayerAssigner.OnPlayerDisconnected += OnPlayerDisconnected;
+        
         King.KingHappy += KingHappy;
         King.KingAngry += KingAngry;
     }
 
     private void OnDisable()
     {
+        PlayerAssigner.OnPlayerConnected -= OnPlayerConnected;
+        PlayerAssigner.OnPlayerDisconnected -= OnPlayerDisconnected;
+        
         King.KingHappy -= KingHappy;
         King.KingAngry -= KingAngry;    
+    }
+    
+    private void OnPlayerConnected(Player _player)
+    {
+        players.Add(_player);
+    }
+    
+    private void OnPlayerDisconnected(Player _player)
+    {
+        players.Remove(_player);
     }
 
     private void KingHappy()
     {
-        fadeImage.SetActive(true);
-        menuButton.SetActive(true);
-        Debug.Log("King is Happy!");
-        StartCoroutine(ShowingScore());
+        ShowGameOver(true);
     }
 
     private void KingAngry()
     {
-        fadeImage.SetActive(true);
-        gameOverText.SetActive(true);
-        menuButton.SetActive(true);
-        Debug.Log("King is Angry!");
+        ShowGameOver(false);
     }
 
-    private IEnumerator ShowingScore()
+    private void ShowGameOver(bool _win)
     {
-        playerImage.SetActive(true);
-
-        yield return new WaitForSeconds(0.5f);
-
-        for (int i = 0; i < scoreManager.players.Count; i++)
+        Debug.Log(1);
+        
+        titleText.text = _win ? "The king is NOT satisfied." : "The king is satisfied!";
+        
+        foreach (var player in players)
         {
-            playerText[i].text = "Score : " + scoreManager.players[i].Score;
+            ScoreCard scoreCard = Instantiate(scoreCardPrefab, scoreCardContainer);
+            scoreCard.Refresh(player, _win);
         }
+        
+        content.gameObject.SetActive(true);
     }
-
+    
     public void BackToMenu()
     {
-        Debug.Log("Work!");
         SceneManager.LoadScene("MenuScene");
     }
 }

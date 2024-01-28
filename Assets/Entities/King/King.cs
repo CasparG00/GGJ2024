@@ -25,18 +25,22 @@ public class King : MonoBehaviour
 
     [SerializeField] private int decreaseRate = 1;
     [SerializeField] private int activitySetSize = 20;
+    
+    [SerializeField] private Animator animator;
 
     private List<Activity> preferredActivitySet;
 
     // The index of the current preferred activity in the list.
     private int preferredActivityIndex;
 
-    public float CurrentHumor { get; private set; } = 500f;
+    public float CurrentHumor { get; private set; }
     public int MaximumHumor => maximumHumor;
 
     public static King Instance { get; private set; }
-
-    public bool playersHaveWon = false;
+    
+    private bool gameEnded;
+    
+    private static readonly int humor = Animator.StringToHash("Humor");
 
     private void Awake()
     {
@@ -53,6 +57,9 @@ public class King : MonoBehaviour
         #endregion singleton
 
         CreatePreferredActivityList();
+        
+        CurrentHumor = maximumHumor * 0.5f;
+        
         StartCoroutine(DequeuePreferredActivity());
     }
 
@@ -75,29 +82,46 @@ public class King : MonoBehaviour
 
     private void Update()
     {
-        HandleHumor();
+        if (gameEnded)
+            return;
+        
+        if (CurrentHumor >= maximumHumor)
+        {
+            CurrentHumor = maximumHumor;
+            
+            KingHappy?.Invoke();
+            OnPreferredActivityChanged?.Invoke(Activity.Idle);
 
-        if (CurrentHumor < 0)
+            gameEnded = true;
+
+            return;
+        }
+        
+        if (CurrentHumor <= 0)
         {
             CurrentHumor = 0;
+
             KingAngry?.Invoke();
-        }
+            OnPreferredActivityChanged?.Invoke(Activity.Idle);
+            
 
-        if (CurrentHumor > maximumHumor)
-        {
-            playersHaveWon = true;
-            KingHappy?.Invoke();
-            CurrentHumor = maximumHumor;
+            gameEnded = true;
+            
+            return;
         }
+        
+        HandleHumor();
     }
-
 
     private IEnumerator DequeuePreferredActivity()
     {
-        while (CurrentHumor > 0)
+        while (CurrentHumor > 0 && CurrentHumor < maximumHumor)
         {
             yield return new WaitForSeconds(UnityEngine.Random.Range(attentionSpanRange.x, attentionSpanRange.y));
 
+            if (gameEnded)
+                yield break;
+            
             // Add one to the index.
             // Then use the modulo to set the index back to 0 if it's greater than the length of the list.
             preferredActivityIndex = (preferredActivityIndex + 1) % preferredActivitySet.Count;
@@ -151,5 +175,7 @@ public class King : MonoBehaviour
     private void HandleHumor()
     {
         CurrentHumor -= decreaseRate * Time.deltaTime;
+        
+        animator.SetFloat(humor, CurrentHumor / maximumHumor);
     }
 }

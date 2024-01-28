@@ -13,17 +13,26 @@ public class JokesGameManager : MonoBehaviour
     private void OnEnable()
     {
         King.OnPreferredActivityChanged += OnPreferredActivityChanged;
+        King.KingHappy += OnGameOver;
+        King.KingAngry += OnGameOver;
         
         PlayerAssigner.OnPlayerConnected += OnPlayerConnected;
         PlayerAssigner.OnPlayerDisconnected += OnPlayerDisconnected;
     }
-    
+
     private void OnDisable()
     {
         King.OnPreferredActivityChanged -= OnPreferredActivityChanged;
+        King.KingHappy += OnGameOver;
+        King.KingAngry += OnGameOver;
         
         PlayerAssigner.OnPlayerConnected -= OnPlayerConnected;
         PlayerAssigner.OnPlayerDisconnected -= OnPlayerDisconnected;
+    }
+    
+    private void OnGameOver()
+    {
+        EndAllJokesGames();
     }
     
     private void OnPreferredActivityChanged(Activity _activity)
@@ -49,13 +58,18 @@ public class JokesGameManager : MonoBehaviour
         }
         else
         {
-            foreach (var element in activeJokeGames)
+            EndAllJokesGames();
+        }
+    }
+    
+    private void EndAllJokesGames()
+    {
+        foreach (var element in activeJokeGames)
+        {
+            bool isGameActive = element.Value != null;
+            if (isGameActive)
             {
-                bool isGameActive = element.Value != null;
-                if (isGameActive)
-                {
-                    element.Value.EndJokesGame();
-                }
+                element.Value.EndJokesGame();
             }
         }
     }

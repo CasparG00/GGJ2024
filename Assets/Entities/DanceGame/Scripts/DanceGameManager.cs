@@ -18,6 +18,8 @@ public class DanceGameManager : MonoBehaviour
     private void OnEnable()
     {
         King.OnPreferredActivityChanged += OnPreferredActivityChanged;
+        King.KingHappy += OnGameOver;
+        King.KingAngry += OnGameOver;
         
         PlayerAssigner.OnPlayerConnected += OnPlayerConnected;
         PlayerAssigner.OnPlayerDisconnected += OnPlayerDisconnected;
@@ -26,11 +28,18 @@ public class DanceGameManager : MonoBehaviour
     private void OnDisable()
     {
         King.OnPreferredActivityChanged -= OnPreferredActivityChanged;
+        King.KingHappy -= OnGameOver;
+        King.KingAngry -= OnGameOver;
         
         PlayerAssigner.OnPlayerConnected -= OnPlayerConnected;
         PlayerAssigner.OnPlayerDisconnected -= OnPlayerDisconnected;
     }
-    
+
+    private void OnGameOver()
+    {
+        StopAllDanceGames();
+    }
+
     private void OnPreferredActivityChanged(Activity _activity)
     {
         kingPreferredActivity = _activity;
@@ -41,14 +50,7 @@ public class DanceGameManager : MonoBehaviour
         }
         else
         {
-            foreach (var element in activeDanceGames)
-            {
-                bool isDanceGameActive = element.Value != null;
-                if (isDanceGameActive)
-                {
-                    element.Value.EndDanceGame();
-                }
-            }
+            StopAllDanceGames();
         }
     }
 
@@ -73,6 +75,18 @@ public class DanceGameManager : MonoBehaviour
             activeDanceGames[_player].EndDanceGame();
 
         activeDanceGames.Remove(_player);
+    }
+    
+    private void StopAllDanceGames()
+    {
+        foreach (var element in activeDanceGames)
+        {
+            bool isDanceGameActive = element.Value != null;
+            if (isDanceGameActive)
+            {
+                element.Value.EndDanceGame();
+            }
+        }
     }
 
     private void CreateDanceMoveList()
