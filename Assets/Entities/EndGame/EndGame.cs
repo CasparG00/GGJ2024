@@ -8,7 +8,8 @@ public class EndGame : MonoBehaviour
 {
     [SerializeField] private GameObject fadeImage;
     [SerializeField] private PlayerScoreManager scoreManager;
-    [SerializeField] private TextMeshProUGUI gameOverText;
+    [SerializeField] private GameObject gameOverText;
+    [SerializeField] private GameObject menuButton;
 
     [SerializeField] private GameObject playerImage;
     [SerializeField] private TextMeshProUGUI[] playerText;
@@ -39,6 +40,7 @@ public class EndGame : MonoBehaviour
     private void KingHappy()
     {
         fadeImage.SetActive(true);
+        menuButton.SetActive(true);
         Debug.Log("King is Happy!");
         StartCoroutine(ShowingScore());
     }
@@ -46,7 +48,8 @@ public class EndGame : MonoBehaviour
     private void KingAngry()
     {
         fadeImage.SetActive(true);
-        gameOverText.enabled = true;
+        gameOverText.SetActive(true);
+        menuButton.SetActive(true);
         Debug.Log("King is Angry!");
     }
 
@@ -64,23 +67,7 @@ public class EndGame : MonoBehaviour
 
     public void BackToMenu()
     {
+        Debug.Log("Work!");
         SceneManager.LoadScene("MenuScene");
     }
-
-    //private void RefreshCells(int _scoreChange)
-    //{
-    //    for (int i = 0; i < players.Count; i++)
-    //    {
-    //        //playerScoreCells[i].Refresh(players[i].Color, i, players[i].Score);
-    //    }
-    //}
-
-    //private void OnPlayerConnected(Player _player)   
-    //{
-    //    players.Add(_player);
-
-    //    _player.OnPlayerScoreChanged += RefreshCells;
-
-    //    player2Score = players[0].Score;
-    //}
 }

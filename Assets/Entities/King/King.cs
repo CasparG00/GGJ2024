@@ -80,14 +80,12 @@ public class King : MonoBehaviour
         if (CurrentHumor < 0)
         {
             CurrentHumor = 0;
-            Debug.Log("Angry!");
             KingAngry?.Invoke();
         }
 
         if (CurrentHumor > maximumHumor)
         {
             playersHaveWon = true;
-            Debug.Log("Happy!");
             KingHappy?.Invoke();
             CurrentHumor = maximumHumor;
         }
