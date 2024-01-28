@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
 
     private InputAction moveAction;
     private InputAction punchAction;
+
+    public AudioSource source;
     
     private Dictionary<int, InputAction> danceMoveActions = new();
 
@@ -100,6 +102,7 @@ public class PlayerController : MonoBehaviour
                 
                 player.AddScore();
                 otherPlayer.Hit();
+                source.Play();
             }
         }
 
