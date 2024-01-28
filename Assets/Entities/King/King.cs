@@ -13,29 +13,31 @@ public class King : MonoBehaviour
     /// There's only one king so a static event is fine. 
     /// </summary>
     public static event Action<Activity> OnPreferredActivityChanged;
-    
+    public static event Action KingHappy;
+    public static event Action KingAngry;
+
     private static readonly List<Player> playerList = new();
 
     // The minimum and maximum amount of time the king will like an activity before changing his mind.
-    [SerializeField] private Vector2Int attentionSpanRange = Vector2Int.one;  
-    
+    [SerializeField] private Vector2Int attentionSpanRange = Vector2Int.one;
+
     [SerializeField] private int maximumHumor = 1000;
-    
+
     [SerializeField] private int decreaseRate = 1;
     [SerializeField] private int activitySetSize = 20;
-    
+
     private List<Activity> preferredActivitySet;
 
     // The index of the current preferred activity in the list.
-    private int preferredActivityIndex; 
+    private int preferredActivityIndex;
 
     public float CurrentHumor { get; private set; } = 500f;
     public int MaximumHumor => maximumHumor;
-   
+
     public static King Instance { get; private set; }
 
     public bool playersHaveWon = false;
-    
+
     private void Awake()
     {
         #region singleton
@@ -75,28 +77,33 @@ public class King : MonoBehaviour
     {
         HandleHumor();
 
-        if(CurrentHumor < 0)
+        if (CurrentHumor < 0)
         {
             CurrentHumor = 0;
+            Debug.Log("Angry!");
+            KingAngry?.Invoke();
         }
-        
-        if(CurrentHumor > maximumHumor)
+
+        if (CurrentHumor > maximumHumor)
         {
-            playersHaveWon = true;  
+            playersHaveWon = true;
+            Debug.Log("Happy!");
+            KingHappy?.Invoke();
             CurrentHumor = maximumHumor;
         }
     }
+
 
     private IEnumerator DequeuePreferredActivity()
     {
         while (CurrentHumor > 0)
         {
             yield return new WaitForSeconds(UnityEngine.Random.Range(attentionSpanRange.x, attentionSpanRange.y));
-            
+
             // Add one to the index.
             // Then use the modulo to set the index back to 0 if it's greater than the length of the list.
             preferredActivityIndex = (preferredActivityIndex + 1) % preferredActivitySet.Count;
-            
+
             OnPreferredActivityChanged?.Invoke(preferredActivitySet[preferredActivityIndex]);
         }
     }
@@ -104,7 +111,7 @@ public class King : MonoBehaviour
     private void CreatePreferredActivityList()
     {
         preferredActivitySet = new List<Activity>();
-        
+
         for (int i = 0; i < activitySetSize; i++)
         {
             // Every loop we create a list of all possible activities.
@@ -112,12 +119,12 @@ public class King : MonoBehaviour
 
             // Then we remove the idle activity because the king does not like idling.
             possibleActivities.Remove(Activity.Idle);
-            
+
             // Then we remove the last activity in the preferred activity set.
             // This is to prevent the king from liking the same activity twice in a row.
             if (preferredActivitySet.Count > 0)
                 possibleActivities.Remove(preferredActivitySet.Last());
-            
+
             // Then we choose a random activity from the list that's left to add to the set.
             preferredActivitySet.Add(possibleActivities[UnityEngine.Random.Range(0, possibleActivities.Count)]);
         }
