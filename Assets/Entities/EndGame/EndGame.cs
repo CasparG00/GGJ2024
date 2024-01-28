@@ -63,8 +63,8 @@ public class EndGame : MonoBehaviour
     private void ShowGameOver(bool _win)
     {
         titleText.text = _win ? "The king is satisfied!" : "The king is NOT satisfied.";
-        
-        Player winningPlayer = players.OrderByDescending(_player => _player.Score).First();
+
+        Player winningPlayer = _win ? players.OrderByDescending(_player => _player.Score).First() : null;
         
         foreach (var player in players)
         {

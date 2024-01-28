@@ -86,6 +86,7 @@ GameObject:
   - component: {fileID: 4818975334678372444}
   - component: {fileID: 8298812551753965247}
   - component: {fileID: 1478440648770435246}
+  - component: {fileID: 6532812729732812834}
   m_Layer: 5
   m_Name: PlayerText
   m_TagString: Untagged
@@ -209,6 +210,26 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &6532812729732812834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1374923734261599874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: 50
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!1 &2184908620964693441
 GameObject:
   m_ObjectHideFlags: 0
@@ -220,6 +241,7 @@ GameObject:
   - component: {fileID: 4761887804345958303}
   - component: {fileID: 6574765277227810377}
   - component: {fileID: 1820296579664496293}
+  - component: {fileID: 6276456125674028208}
   m_Layer: 5
   m_Name: ScoreText
   m_TagString: Untagged
@@ -343,6 +365,26 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &6276456125674028208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2184908620964693441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: 50
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!1 &2697389239139725394
 GameObject:
   m_ObjectHideFlags: 0
@@ -403,7 +445,7 @@ MonoBehaviour:
   m_ChildAlignment: 4
   m_Spacing: 50
   m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
+  m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
   m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
@@ -424,8 +466,8 @@ MonoBehaviour:
   playerText: {fileID: 1478440648770435246}
   scoreText: {fileID: 1820296579664496293}
   playerImage: {fileID: 5635922024834035965}
-  winSprite: {fileID: 21300000, guid: 2f96cff024550b243999e7a3dbed57fd, type: 3}
-  loseSprite: {fileID: -1295856389, guid: 48a5b2ad17d5c874cbb8d0ad7c6e821d, type: 3}
+  winSprite: {fileID: 21300000, guid: 3ac8c0a86b745224d90c5579c905efaa, type: 3}
+  loseSprite: {fileID: 21300000, guid: 618272358e5b09745885df66c991b679, type: 3}
 --- !u!1 &4279368770442684378
 GameObject:
   m_ObjectHideFlags: 0
@@ -435,6 +477,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3015556385915862358}
+  - component: {fileID: 9163732741948357780}
   m_Layer: 5
   m_Name: Image Wrapper
   m_TagString: Untagged
@@ -462,3 +505,23 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &9163732741948357780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4279368770442684378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: 1
+  m_LayoutPriority: 1
